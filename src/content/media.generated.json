@@ -7,7 +7,8 @@
     },
     "demo": {
       "src": "/media/jony-kids-english/demo.mp4",
-      "type": "video/mp4"
+      "type": "video/mp4",
+      "audio": true
     },
     "screenshots": [
       {
@@ -43,7 +44,8 @@
     },
     "demo": {
       "src": "/media/level-up/demo.mp4",
-      "type": "video/mp4"
+      "type": "video/mp4",
+      "audio": true
     },
     "screenshots": [
       {
@@ -72,7 +74,8 @@
     },
     "demo": {
       "src": "/media/jony-math/demo.mp4",
-      "type": "video/mp4"
+      "type": "video/mp4",
+      "audio": true
     },
     "screenshots": [
       {
@@ -101,7 +104,8 @@
     },
     "demo": {
       "src": "/media/flashy/demo.mp4",
-      "type": "video/mp4"
+      "type": "video/mp4",
+      "audio": true
     },
     "screenshots": [
       {
@@ -137,7 +141,8 @@
     },
     "demo": {
       "src": "/media/brain-train/demo.mp4",
-      "type": "video/mp4"
+      "type": "video/mp4",
+      "audio": true
     },
     "screenshots": [
       {
@@ -150,7 +155,7 @@
       {
         "src": "/media/brain-train/shot-02.webp",
         "alt": "Brain Train subject choice",
-        "caption": "Subjects, multi-select, in the child’s chosen colour",
+        "caption": "Subjects, multi-select, in the child\u2019s chosen colour",
         "width": 2160,
         "height": 1350
       }
@@ -167,7 +172,8 @@
     },
     "demo": {
       "src": "/media/coma/demo.mp4",
-      "type": "video/mp4"
+      "type": "video/mp4",
+      "audio": true
     },
     "screenshots": [],
     "capturedFrom": "capture/motion/coma",
@@ -181,7 +187,8 @@
     },
     "demo": {
       "src": "/media/xn-crm/demo.mp4",
-      "type": "video/mp4"
+      "type": "video/mp4",
+      "audio": true
     },
     "screenshots": [
       {
@@ -193,15 +200,15 @@
       },
       {
         "src": "/media/xn-crm/shot-02.webp",
-        "alt": "XN CRM finance page with the largest debts and the month’s income",
-        "caption": "Largest debts, the cash drawer and the month’s figures on one page",
+        "alt": "XN CRM finance page with the largest debts and the month\u2019s income",
+        "caption": "Largest debts, the cash drawer and the month\u2019s figures on one page",
         "width": 2160,
         "height": 1350
       },
       {
         "src": "/media/xn-crm/shot-03.webp",
         "alt": "XN CRM weekly timetable: every group, teacher and room",
-        "caption": "The week at a glance — 24 lessons, no double-booked rooms",
+        "caption": "The week at a glance \u2014 24 lessons, no double-booked rooms",
         "width": 2160,
         "height": 1350
       },

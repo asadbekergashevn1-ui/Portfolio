@@ -144,3 +144,4 @@ writeFileSync(RESULTS, JSON.stringify(results, null, 2) + '\n');
 const { writeReport } = await import('./lib/report.mjs');
 writeReport(results, join(ROOT, 'capture', 'REPORT.md'));
 console.log('\nmanifest, results and REPORT.md written');
+console.log('demos are silent until scored: python3 capture/sound/sound.py ' + todo.map((s) => s.id).join(' '));
