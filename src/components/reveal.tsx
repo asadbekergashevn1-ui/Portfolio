@@ -17,7 +17,7 @@ import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'rea
  * animation the site needs and a library would cost ~40 KB per page.
  */
 /** True once the element is on screen or has been scrolled past (see Reveal). */
-export function useShown(ref: RefObject<HTMLElement | null>) {
+export function useShown(ref: RefObject<HTMLElement | null>, fold = 0.92) {
   const [shown, setShown] = useState(false);
   useEffect(() => {
     const el = ref.current;
@@ -29,7 +29,7 @@ export function useShown(ref: RefObject<HTMLElement | null>) {
     let frame = 0;
     const check = () => {
       frame = 0;
-      if (el.getBoundingClientRect().top < window.innerHeight * 0.92) {
+      if (el.getBoundingClientRect().top < window.innerHeight * fold) {
         setShown(true);
         cleanup();
       }
@@ -46,7 +46,7 @@ export function useShown(ref: RefObject<HTMLElement | null>) {
     window.addEventListener('resize', onScroll, { passive: true });
     check();
     return cleanup;
-  }, [ref]);
+  }, [ref, fold]);
   return shown;
 }
 
