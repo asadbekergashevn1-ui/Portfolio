@@ -4,7 +4,7 @@ export default {
   viewport: { width: 1280, height: 800 },
   allowHosts: ['jony-math-bepul-kurs.vercel.app'],
   notes: ['The sign-up form is filled with sample values and never submitted; all writes were blocked.'],
-  outputs: [{ slug: 'jony-math', preview: 'table', poster: 'poster', shows: 'The interactive multiplication table in the hero, the ten outcomes, the four-week plan and the sign-up form.' }],
+  outputs: [{ slug: 'jony-math', preview: 'table', poster: 'poster', posterStill: 'table', shows: 'The interactive multiplication table in the hero, the ten outcomes, the four-week plan and the sign-up form.' }],
   async run(d, page) {
     await d.shot('table', async () => {
       // the hero's table is live: each cell is a button and the equation below it answers

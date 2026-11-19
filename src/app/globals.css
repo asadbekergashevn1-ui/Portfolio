@@ -4,6 +4,15 @@
    Dark is the primary theme. Light exists for long-form reading and print.
    Every text token meets 4.5:1 on surface-base and surface-raised.        */
 
+/* ───────────────────────── Signal motion tokens ─────────────────────────
+   Two curves, four durations. Everything that moves on the site uses these. */
+:root {
+  --dur-fast: 160ms;   /* colour and opacity feedback */
+  --dur-base: 240ms;   /* hover lifts, small shifts */
+  --dur-slow: 420ms;   /* page content entering */
+  --dur-reveal: 900ms; /* media and type reveals */
+}
+
 :root,
 [data-theme='dark'] {
   --surface-base: #0a0b0d;
@@ -83,6 +92,7 @@
   --radius-lg: 14px;
 
   --ease-signal: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-emph: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {
@@ -111,6 +121,8 @@
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
+    .js .media-reveal { clip-path: none !important; }
+    .js .media-reveal .media-zoom { transform: none !important; }
     *, *::before, *::after {
       animation-duration: 0.001ms !important;
       animation-iteration-count: 1 !important;
@@ -183,13 +195,15 @@
   }
 
   .link-underline {
-    text-decoration-line: underline;
-    text-decoration-color: var(--accent-muted);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
-    transition: text-decoration-color 180ms ease;
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent), var(--accent)), linear-gradient(var(--accent-muted), var(--accent-muted));
+    background-size: 0% 1px, 100% 1px;
+    background-position: 0 100%, 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 3px;
+    transition: background-size var(--dur-slow) var(--ease-emph);
   }
-  .link-underline:hover { text-decoration-color: var(--accent); }
+  .link-underline:hover, .link-underline:focus-visible { background-size: 100% 1px, 100% 1px; }
 
   .skip-link {
     position: absolute;
@@ -210,13 +224,61 @@
 /* scroll reveal — hidden only when JS is present to reveal it again */
 .js .reveal {
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 550ms var(--ease-signal), transform 550ms var(--ease-signal);
+  transform: translateY(18px);
+  transition: opacity var(--dur-reveal) var(--ease-emph), transform var(--dur-reveal) var(--ease-emph);
 }
 .js .reveal.is-shown { opacity: 1; transform: none; }
+
+/* cinematic media reveal: the frame opens upward while the picture settles from a slight push-in */
+.media-zoom { transition: transform 1200ms var(--ease-emph); }
+.js .media-reveal { clip-path: inset(14% 0 0 0); transition: clip-path 1100ms var(--ease-emph); }
+.js .media-reveal .media-zoom { transform: scale(1.08); }
+.js .media-reveal.is-shown { clip-path: inset(0 0 0 0); }
+.js .media-reveal.is-shown .media-zoom { transform: none; }
+@media (hover: hover) and (pointer: fine) {
+  [data-card]:hover .media-reveal.is-shown .media-zoom,
+  [data-card]:focus-within .media-reveal.is-shown .media-zoom { transform: scale(1.035); }
+}
+
+/* headline words rise into place on load. They start partly visible, so the
+   largest text is painted on the first frame and LCP is not delayed. */
+.words .w { display: inline-block; overflow: clip; overflow-clip-margin: 0.12em; vertical-align: top; }
+.words .w > span { display: inline-block; animation: word-rise var(--dur-reveal) var(--ease-emph) both; animation-delay: calc(var(--i) * 45ms + 60ms); }
+@keyframes word-rise { from { transform: translateY(0.42em); opacity: 0.2; } }
+
+/* card spotlight: a soft accent glow that follows a fine pointer, behind the content */
+@media (hover: hover) and (pointer: fine) {
+  [data-card] {
+    background-image: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-blend-mode: normal;
+  }
+  [data-card]:not(:hover) { background-image: none; }
+}
+.card-cue { opacity: 0; transform: translateX(-6px); transition: opacity var(--dur-base) var(--ease-signal), transform var(--dur-base) var(--ease-signal); }
+[data-card]:hover .card-cue, [data-card]:focus-within .card-cue { opacity: 1; transform: none; }
+
+/* arrow nudge on calls to action */
+.cta-arrow { display: inline-block; transition: transform var(--dur-base) var(--ease-emph); }
+a:hover > .cta-arrow, button:hover > .cta-arrow { transform: translateX(3px); }
+
+/* page transitions (View Transitions API, client navigations only; absent = plain navigation) */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) { animation: vt-out 200ms var(--ease-signal) both; }
+  ::view-transition-new(root) { animation: vt-in var(--dur-slow) var(--ease-emph) both; }
+  ::view-transition-group(site-header) { animation: none; }
+  ::view-transition-old(site-header), ::view-transition-new(site-header) { animation: none; }
+  ::view-transition-group(*) { animation-duration: 560ms; animation-timing-function: var(--ease-emph); }
+}
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+[data-site-header] { view-transition-name: site-header; }
 
 @media print {
   [data-print-hide] { display: none !important; }
   .js .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .js .media-reveal { clip-path: none !important; }
+  .js .media-reveal .media-zoom { transform: none !important; }
   html, body { background: #fff !important; color: #000 !important; }
 }

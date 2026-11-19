@@ -17,7 +17,7 @@ export default function ContactPage() {
           <h1 className="display balance text-[clamp(2.5rem,5.5vw,4.25rem)] text-ink">Tell me what the business does.</h1>
           <p className="pretty mt-7 max-w-[44ch] text-[1.0625rem] leading-[1.7] text-ink-2">
             The most useful first message describes the work people are doing by hand today, and
-            what it costs when it goes wrong. I usually reply within two working days.
+            what it costs when it goes wrong.
           </p>
 
           <dl className="mt-12 space-y-6 border-t border-line pt-8">

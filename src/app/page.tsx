@@ -12,7 +12,7 @@ const categoryCount = categories.filter((c) => projectsByCategory(c.slug).length
 
 const HEADLINE_METRICS = [
   { value: String(shippedCount), label: 'products shipped', note: `${categoryCount} categories` },
-  { value: '205k', label: 'lines of code', note: 'counted, not estimated' },
+  { value: '190k', label: 'lines of code', note: 'hand-written, counted' },
   { value: '5', label: 'production databases', note: 'PostgreSQL and Supabase' },
   { value: '72', label: 'deploys on one site', note: 'and still shipping' },
 ];

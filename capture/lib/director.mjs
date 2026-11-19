@@ -48,6 +48,8 @@ export class Director {
     this.camera = [{ t: 0, s: 1, cx: width / 2, cy: height / 2 }];
     this.marks = {};
     this.stills = [];
+    /** What happened and when — the sound designer scores the edit from this. */
+    this.events = [];
   }
 
   now() {
@@ -111,14 +113,16 @@ export class Director {
     const y = big ? b.y + b.height / 2 : b.y + b.height * 0.64;
     await this.move(x + (dx ?? 0), y + (dy ?? 0), ms);
     await sleep(hover);
+    this.events.push({ t: this.now(), type: 'click' });
     await this.page.mouse.down();
     await sleep(90);
     await this.page.mouse.up();
     await sleep(after);
   }
 
-  async type(target, text, { delay = 62, after = 300 } = {}) {
-    await this.click(target, { after: 160 });
+  async type(target, text, { delay = 62, after = 300, dx, dy } = {}) {
+    await this.click(target, { after: 160, dx, dy });
+    this.events.push({ t: this.now(), type: 'type', n: text.length, dur: (text.length * delay) / 1000 });
     await this.page.keyboard.type(text, { delay });
     await sleep(after);
   }
@@ -126,6 +130,7 @@ export class Director {
   /** Real wheel events, eased, so the site's own smooth-scrolling and scroll triggers respond. */
   async wheel(dy, ms = 1800) {
     // time-driven: however slow each wheel call is on a heavy page, the scroll lasts `ms`
+    this.events.push({ t: this.now(), type: 'scroll', dur: ms / 1000 });
     let sent = 0;
     const start = performance.now();
     for (;;) {
@@ -161,6 +166,7 @@ export class Director {
     const last = this.camera[this.camera.length - 1];
     const t = this.now();
     this.camera.push({ t, s: last.s, cx: last.cx, cy: last.cy }, { t: t + ms / 1000, s, cx, cy });
+    this.events.push({ t, type: 'zoomIn', dur: ms / 1000 });
     await sleep(ms + hold);
   }
 
@@ -168,6 +174,7 @@ export class Director {
     const last = this.camera[this.camera.length - 1];
     const t = this.now();
     this.camera.push({ t, s: last.s, cx: last.cx, cy: last.cy }, { t: t + ms / 1000, s: 1, cx: this.w / 2, cy: this.h / 2 });
+    this.events.push({ t, type: 'zoomOut', dur: ms / 1000 });
     await sleep(ms);
   }
 

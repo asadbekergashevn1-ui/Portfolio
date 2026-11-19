@@ -9,13 +9,13 @@ export const profile: Profile = {
   role: 'Software engineer',
   location: 'Termiz, Uzbekistan',
   available: true,
-  headline: 'I build systems that other people’s businesses run on.',
+  headline: 'I build the software that brings a business its customers — and keeps everything after that in order.',
   intro: [
-    'Ten products shipped: a multi-tenant CRM handling a school’s money and payroll, an unattended agent auditing teachers over Telegram, dispatch software that puts children in the right car.',
-    'Not prototypes. They hold real data and fail in real ways — which is the part I design for.',
+    'Websites that turn visitors into enrolled students. Systems that keep money, payroll, attendance and homework under control without anyone chasing it. Apps that put a working day, or a vocabulary course, into a clear order.',
+    'Ten products, all shipped and in use with real data — built so the business can stop worrying about them.',
   ],
   about: [
-    'I work from Termiz, in the south of Uzbekistan, mostly for small businesses that cannot afford for their software to be wrong: a school whose fees, payroll and attendance all live in one system I built, and whose owner reads my reports every evening.',
+    'I work from Termiz, in the south of Uzbekistan, mostly for small businesses that cannot afford for their software to be wrong: a school whose fees, payroll and attendance all live in one system I built, and whose owner gets a verdict on every lesson’s homework without opening a single chat.',
     'That shapes how I work. I model the business before I write an endpoint. I put the rules that matter in the database, where a second browser tab or a careless script cannot get around them. I design for the failure first — the model that returns 504s, the migration that runs against live data, the shuttle that never reaches the geofence — and I write down what happened when it does.',
     'I build across the whole stack because these clients need one person who understands all of it: Postgres and row-level security, NestJS and Prisma, Vue and React, Ionic and Expo on the phone, Python agents on a server under systemd.',
   ],

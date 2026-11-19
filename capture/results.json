@@ -4,7 +4,7 @@
     "scene": "jony-kids-english",
     "source": "https://jonykids.uz/",
     "shows": "The hero, the course cards, the results carousel, the price plans and the sign-up modal — filled, never sent.",
-    "demoSeconds": 17.7,
+    "demoSeconds": 17.8,
     "previewSeconds": 8,
     "shots": [
       "hero",
@@ -27,7 +27,7 @@
     "scene": "level-up",
     "source": "https://lu-demo-nine.vercel.app/",
     "shows": "The pinned hero panels, the results counting up beside the radar, the 3D result-card stack and the growth path.",
-    "demoSeconds": 17.1,
+    "demoSeconds": 16.8,
     "previewSeconds": 8,
     "shots": [
       "hero",
@@ -88,7 +88,7 @@
     "scene": "brain-train",
     "source": "https://desktop-tutorial-eight-lovat.vercel.app/",
     "shows": "The mascot welcome, choosing an age, the whole app re-theming as colours are picked, and choosing subjects.",
-    "demoSeconds": 23.8,
+    "demoSeconds": 23.6,
     "previewSeconds": 8,
     "shots": [
       "welcome",
@@ -127,16 +127,33 @@
     "errors": []
   },
   "xn-crm": {
-    "status": "unavailable",
-    "slug": "xn-crm",
-    "reason": "Self-hosted behind a quick tunnel with no stable public address; its one hosted build is blocked. The staff console needs a seeded tenant to show anything.",
-    "needs": "A demo deployment with a seeded demo tenant (students, payments, attendance), or permission to run its Docker stack here on throwaway data."
+    "status": "captured",
+    "scene": "xn-crm",
+    "source": "http://localhost:5173/login",
+    "shows": "The director’s dashboard, groups filling up, a debt collected from the largest debtor and the books updating, the weekly timetable and cash flow.",
+    "demoSeconds": 34.4,
+    "previewSeconds": 8,
+    "shots": [
+      "dashboard",
+      "groups",
+      "payment",
+      "schedule",
+      "cashflow"
+    ],
+    "stills": 4,
+    "blockedWrites": [],
+    "blockedHosts": [],
+    "notes": [
+      "Recorded from the real application running locally against a throwaway database. Every school, student, family and phone number on screen is invented demo data.",
+      "The payment taken on camera is processed by the real application — against that demo database, never production."
+    ],
+    "errors": []
   },
   "jony-taxi": {
     "status": "unavailable",
     "slug": "jony-taxi",
-    "reason": "Every screen past sign-in needs a Supabase project with its 27 migrations applied; the public build is only the sign-in screen.",
-    "needs": "A throwaway Supabase project with the migrations and seed applied, plus a demo driver and a demo parent account."
+    "reason": "Every screen past sign-in needs a Supabase backend (auth, REST, realtime). All 27 migrations and the seed were applied to a local Postgres here, but no local Supabase stack could be started: its container images could not be pulled, and running a downloaded API server binary was not permitted in this session. Finding while doing so: the trip generator (generate_daily_trips, migrations 0021/0023/0027) reads centers.seat_capacity and centers.stop_interval_min, which no migration creates — a database built from the migrations alone cannot generate trips.",
+    "needs": "A throwaway Supabase project with the migrations and seed applied (plus the two missing columns), or permission to run a local PostgREST for capture."
   },
   "ish-ritmi": {
     "status": "unavailable",

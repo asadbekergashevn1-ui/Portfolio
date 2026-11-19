@@ -20,6 +20,7 @@ import { scenes, unavailable } from './scenes/index.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
+const sharp = require('sharp');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const WORK = join(ROOT, 'capture', '.work');
@@ -46,7 +47,7 @@ for (const scene of todo) {
   const DPR = SRC_W / VIEW.width;
   const k = OUT_W / VIEW.width;
   const context = await browser.newContext({ viewport: VIEW, deviceScaleFactor: DPR, locale: 'uz-UZ', colorScheme: scene.colorScheme ?? 'light', reducedMotion: 'no-preference' });
-  const net = await guard(context, { allowHosts: scene.allowHosts });
+  const net = await guard(context, { allowHosts: scene.allowHosts, localWrites: scene.localWrites });
   const css = 'html{overflow-x:clip!important}' + redactionCss(scene.redact);
   await context.addInitScript(CURSOR_SCRIPT);
   if (css) await context.addInitScript(`addEventListener('DOMContentLoaded',()=>{const s=document.createElement('style');s.textContent=${JSON.stringify(css)};document.head.appendChild(s);});`);
@@ -72,6 +73,8 @@ for (const scene of todo) {
     await scene.run(d, page);
   } catch (e) {
     console.log(`  ✗ scene failed: ${e.message.split('\n')[0]}`);
+    await page.screenshot({ path: join(WORK, `${scene.id}-fail.png`) }).catch(() => {});
+    console.log((e.stack || '').split('\n').filter((l) => l.includes('scenes/')).slice(0, 2).join('\n'));
     errors.push(`scene: ${e.message.split('\n')[0]}`);
   }
   await rec.stop();
@@ -91,7 +94,11 @@ for (const scene of todo) {
     const pvLen = await renderPreview({ demo: demoFile, out: join(out, 'preview.mp4'), start: pv.g0, duration: Math.min(8, total - pv.g0) });
 
     const posterT = d.marks[output.poster] ?? pv.t0 + pv.dur * 0.6;
-    const poster = await renderPoster({ frames: rec.frames, cameraAt: (t) => d.cameraAt(t), t: posterT, out: join(out, 'poster.webp'), k });
+    const still = output.posterStill && d.stills.find((x) => x.name === output.posterStill);
+    if (still) await sharp(still.file).resize(1440, 900).webp({ quality: 84 }).toFile(join(out, 'poster.webp'));
+    else await renderPoster({ frames: rec.frames, cameraAt: (t) => d.cameraAt(t), t: posterT, out: join(out, 'poster.webp'), k });
+    const events = d.events.map((e) => ({ ...e, t: outputTime(plan, e.t) })).filter((e) => e.t != null);
+    writeFileSync(join(WORK, `${output.slug}-score.json`), JSON.stringify({ duration: total, cuts: plan.slice(1).map((p) => +p.g0.toFixed(3)), events }, null, 2));
 
     const screenshots = [];
     for (const [i, st] of d.stills.filter((x) => !output.stills || output.stills.includes(x.name)).entries()) {

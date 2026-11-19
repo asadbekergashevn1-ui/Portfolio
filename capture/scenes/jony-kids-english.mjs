@@ -5,7 +5,7 @@ export default {
   // parent reviews are real people's chat screenshots: blurred, and never framed
   redact: ['#sharhlar img', '#jkRiver img', '#rvLightbox img'],
   notes: ['Parent review screenshots are blurred during capture and kept out of frame.', 'The sign-up form is filled with sample values and never submitted; all writes were blocked.'],
-  outputs: [{ slug: 'jony-kids-english', preview: 'hero', poster: 'poster', shows: 'The hero, the course cards, the results carousel, the price plans and the sign-up modal — filled, never sent.' }],
+  outputs: [{ slug: 'jony-kids-english', preview: 'hero', poster: 'poster', posterStill: 'hero', shows: 'The hero, the course cards, the results carousel, the price plans and the sign-up modal — filled, never sent.' }],
   async run(d, page) {
     await d.shot('hero', async () => {
       await d.wait(700);

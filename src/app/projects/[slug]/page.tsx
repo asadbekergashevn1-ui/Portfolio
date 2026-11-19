@@ -58,6 +58,17 @@ function LinkRow({ link }: { link: ProjectLink }) {
   );
 }
 
+function StorySection({ id, title, body }: { id: string; title: string; body: string }) {
+  return (
+    <Reveal>
+      <section aria-labelledby={`${id}-h`}>
+        <h2 id={`${id}-h`} className="label mb-4 text-accent">{title}</h2>
+        <p className="pretty measure text-[1.0625rem] leading-[1.8] text-ink-2">{body}</p>
+      </section>
+    </Reveal>
+  );
+}
+
 export default async function ProjectPage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
   const project = getProject(slug);
@@ -70,10 +81,11 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   const { video, demo, screenshots, poster, kind } = project.media;
   const film = demo ?? video;
 
-  const story = [
-    { id: 'problem', title: 'The problem', body: project.problem },
-    { id: 'approach', title: 'The approach', body: project.approach },
-    { id: 'outcome', title: 'The outcome', body: project.outcome },
+  const facts: [string, string][] = [
+    ['Role', project.role],
+    ...(project.client ? ([['Client', project.client]] as [string, string][]) : []),
+    ['Year', project.year],
+    ['State', statusLabel(project.status)],
   ];
 
   return (
@@ -100,12 +112,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
         <p className="pretty measure mt-7 text-[1.0625rem] leading-[1.7] text-ink-2">{project.summary}</p>
 
         <dl className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-lg)] border border-line bg-line lg:grid-cols-4">
-          {[
-            ['Role', project.role],
-            ['Client', project.client ?? 'Personal'],
-            ['Year', project.year],
-            ['State', statusLabel(project.status)],
-          ].map(([k, v]) => (
+          {facts.map(([k, v]) => (
             <div key={k} className="bg-base px-5 py-5">
               <dt className="label text-ink-4">{k}</dt>
               <dd className="mt-2 text-[0.875rem] leading-snug text-ink">{v}</dd>
@@ -125,8 +132,8 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
               Your browser cannot play this video.
             </video>
             <figcaption className="label flex flex-wrap justify-between gap-2 border-t border-line px-5 py-3 text-ink-4">
-              <span>{kind === 'motion' ? 'Motion piece — this project has no screen to record' : 'Recorded from the running product'}</span>
-              <span>No sound</span>
+              <span>{kind === 'motion' ? 'Motion piece — this project has no screen to record' : project.media.demoNote ?? 'Recorded from the running product'}</span>
+              <span>{demo?.audio ? 'Sound on — music and effects' : 'No sound'}</span>
             </figcaption>
           </figure>
         ) : (
@@ -145,14 +152,28 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
 
       <div className="mt-20 grid gap-16 lg:grid-cols-[1fr_18rem]">
         <div className="space-y-16">
-          {story.map((s) => (
-            <Reveal key={s.id}>
-              <section aria-labelledby={`${s.id}-h`}>
-                <h2 id={`${s.id}-h`} className="label mb-4 text-accent">{s.title}</h2>
-                <p className="pretty measure text-[1.0625rem] leading-[1.8] text-ink-2">{s.body}</p>
+          <StorySection id="problem" title="The problem" body={project.problem} />
+
+          {project.benefits.length ? (
+            <Reveal>
+              <section aria-labelledby="benefits-h">
+                <h2 id="benefits-h" className="label mb-6 text-accent">What it changes</h2>
+                <ol className="space-y-px overflow-hidden rounded-[var(--radius-lg)] border border-line bg-line">
+                  {project.benefits.map((b, i) => (
+                    <li key={b.title} className="grid grid-cols-[1.75rem_1fr] gap-x-3 bg-base p-5 sm:grid-cols-[3rem_1fr] sm:gap-x-4 sm:p-6">
+                      <span aria-hidden="true" className="figure text-[0.8125rem] text-accent">{String(i + 1).padStart(2, '0')}</span>
+                      <div>
+                        <h3 className="text-[1.0625rem] font-semibold tracking-[-0.015em] text-ink">{b.title}</h3>
+                        <p className="pretty mt-2 text-[0.9375rem] leading-[1.65] text-ink-2">{b.detail}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
               </section>
             </Reveal>
-          ))}
+          ) : null}
+
+          <StorySection id="approach" title="How it works" body={project.approach} />
 
           <section aria-labelledby="features-h">
             <h2 id="features-h" className="label mb-6 text-accent">What it does</h2>
@@ -165,6 +186,8 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
               ))}
             </ul>
           </section>
+
+          <StorySection id="outcome" title="Where it stands" body={project.outcome} />
 
           {screenshots.length > 0 ? (
             <section aria-labelledby="shots-h">

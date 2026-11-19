@@ -3,7 +3,7 @@ export default {
   url: 'https://desktop-tutorial-eight-lovat.vercel.app/',
   viewport: { width: 960, height: 600 },
   allowHosts: ['desktop-tutorial-eight-lovat.vercel.app'],
-  outputs: [{ slug: 'brain-train', preview: 'colour', poster: 'poster', shows: 'The mascot welcome, choosing an age, the whole app re-theming as colours are picked, and choosing subjects.' }],
+  outputs: [{ slug: 'brain-train', preview: 'colour', poster: 'poster', posterStill: 'colour', shows: 'The mascot welcome, choosing an age, the whole app re-theming as colours are picked, and choosing subjects.' }],
   async run(d, page) {
     const go = (t) => d.click(page.getByText(t, { exact: false }).last(), { ms: 600, after: 700 });
     await d.shot('welcome', async () => {

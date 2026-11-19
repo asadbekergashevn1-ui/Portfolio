@@ -32,7 +32,7 @@ export default {
   viewport: { width: 1280, height: 800 },
   allowHosts: ['flashy-tan.vercel.app'],
   notes: ['Seeded with FLASHY’s own built-in sample set through the real import screen. The statistics shown come from flashcard and quiz sessions actually run in the app before recording.'],
-  outputs: [{ slug: 'flashy', preview: 'flashcards', poster: 'poster', shows: 'A dashboard filled by real study sessions, a flashcard round with self-rating, a multiple-choice test with feedback, and progress.' }],
+  outputs: [{ slug: 'flashy', preview: 'flashcards', poster: 'poster', posterStill: 'dashboard', shows: 'A dashboard filled by real study sessions, a flashcard round with self-rating, a multiple-choice test with feedback, and progress.' }],
   async prepare(page) {
     page.setDefaultTimeout(8000);
     await page.getByText('Namuna yuklash').click();

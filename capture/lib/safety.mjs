@@ -7,14 +7,17 @@
  *   are cut off.
  * Both lists are returned so the report can prove what was refused.
  */
-export async function guard(context, { allowHosts }) {
+export async function guard(context, { allowHosts, localWrites = false }) {
   const log = { blockedWrites: new Set(), blockedHosts: new Set() };
   const allowed = [...allowHosts, 'fonts.googleapis.com', 'fonts.gstatic.com', 'cdn.jsdelivr.net'];
   await context.route('**/*', (route) => {
     const req = route.request();
     const url = new URL(req.url());
     if (url.protocol === 'file:' || url.protocol === 'data:') return route.continue();
-    if (!['GET', 'HEAD'].includes(req.method())) {
+    // A scene that runs against a local, throwaway instance (seeded demo data, nothing real)
+    // may write — but only to localhost. Production hosts stay read-only either way.
+    const local = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+    if (!['GET', 'HEAD'].includes(req.method()) && !(localWrites && local)) {
       log.blockedWrites.add(`${req.method()} ${url.host}${url.pathname}`);
       return route.abort();
     }

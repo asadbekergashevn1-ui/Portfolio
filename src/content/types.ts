@@ -62,7 +62,9 @@ export interface ProjectMedia {
   /** Short muted loop for cards. */
   video: { src: string; type: string } | null;
   /** Full walkthrough for the case study, played with controls. */
-  demo?: { src: string; type: string } | null;
+  demo?: { src: string; type: string; audio?: boolean } | null;
+  /** Shown under the demo when the recording needs context (e.g. recorded on demo data). */
+  demoNote?: string;
   screenshots: Screenshot[];
   /** Why no capture exists yet, surfaced in the capture report. */
   captureBlocker?: string;
@@ -91,6 +93,8 @@ export interface Project {
   approach: string;
   outcome: string;
 
+  /** What it changes for the business — benefit first, then the reason it holds. */
+  benefits: Feature[];
   features: Feature[];
   stack: StackGroup[];
   metrics: Metric[];
