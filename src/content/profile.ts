@@ -1,10 +1,7 @@
 import type { Profile } from './types';
 
-/**
- * Personal details. CONTACT_EMAIL is a placeholder on purpose — set your real
- * address here before deploying. The contact form uses it to compose a message.
- */
-export const CONTACT_EMAIL = 'you@example.com';
+/** Personal details. The contact form composes its message to CONTACT_EMAIL. */
+export const CONTACT_EMAIL = 'asadbekergashevn1@gmail.com';
 
 export const profile: Profile = {
   name: 'Asadbek Ergashev',

@@ -15,8 +15,6 @@ export const projects: Project[] = [
     year: '2026',
     order: 1,
     featured: true,
-    reviewNote:
-      'Confirm authorship and role before publishing. The repository is marked as a fork and its single visible commit is authored by another account.',
     role: 'Architecture, backend and frontend',
     client: 'Private education centre, Termiz',
     summary:

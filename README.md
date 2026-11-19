@@ -65,10 +65,7 @@ Put files under `public/media/<slug>/` and reference them as `/media/<slug>/demo
 
 ## Before you deploy
 
-1. **Set `CONTACT_EMAIL`** in `src/content/profile.ts` — it is a placeholder.
-2. **Resolve the `reviewNote` on XN CRM** in `src/content/projects.ts` (authorship), or set
-   `draft: true` until you have.
-3. Set `NEXT_PUBLIC_SITE_URL` in the host's environment (see `.env.example`).
+Set `NEXT_PUBLIC_SITE_URL` in the host's environment (see `.env.example`).
 
 ## Verification
 
