@@ -23,7 +23,7 @@ export function ProjectCard({ project, priority = false, headingLevel = 3 }: { p
           </Link>
         </Heading>
         <p className="pretty mt-2 text-[0.875rem] leading-[1.6] text-ink-3">{project.tagline}</p>
-        <div className="mt-auto flex items-end justify-between gap-4 pt-5">
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-x-4 gap-y-3 pt-5">
           <ul className="flex flex-wrap gap-1.5" aria-label="Technologies">
             {project.stack.flatMap((g) => g.items).slice(0, 4).map((s) => (
               <li key={s} className="chip">{s}</li>

@@ -2,7 +2,8 @@
 
 Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · the **Signal** design system.
 Every page is prerendered to static HTML; the only client JavaScript is the header,
-the project filter, the contact form, the theme toggle and the scroll reveal.
+the project filter, the contact form, the theme toggle, card video playback, the scroll
+reveal and one small motion layer (page transitions and the card spotlight).
 
 ```bash
 npm install
@@ -50,24 +51,42 @@ the sitemap, and gets its own static route — no page code changes.
 
 ## Media
 
-`media.video`, `media.poster` and `media.screenshots` are empty until real captures exist.
-Cards and case studies are designed for that state: a card shows its lead figure, and a case
-study with no capture simply omits the media panel rather than showing an empty frame.
+Every clip, poster and screenshot under `public/media/<slug>/` is produced by the capture
+pipeline in `capture/` (see `capture/REPORT.md` for what each film shows, how it was
+recorded and which projects have no film yet, and why).
 
-Once a clip is added, `ProjectMedia` handles playback:
+- `node capture/run.mjs [slug…]` — records real product demos with Playwright: cursor-led
+  shots, camera push-ins, cuts, posters and stills. Production sites are read-only (every
+  non-GET request is blocked); a scene may opt in to writes only against `localhost`.
+- `node capture/motion/render-motion.mjs` + `publish.mjs coma` — the COMA motion piece.
+- `python3 capture/sound/sound.py [slug…]` — music and sound effects for each demo film,
+  synthesised from the capture's event log and muxed into `demo.mp4` (card loops stay silent).
+  Re-run it after re-recording a film.
+
+`ProjectMedia` handles card playback:
 
 - **Desktop** (fine pointer): muted, loops, plays while the card is hovered or focused
 - **Touch**: plays while 60% of it is on screen, pauses when it leaves
 - **Reduced motion**: never autoplays, the poster stays
 - The video source is attached only when the card nears the viewport
 
-Put files under `public/media/<slug>/` and reference them as `/media/<slug>/demo.mp4`.
+A project with no capture keeps a typographic card and its case study omits the media panel.
 
-## Before you deploy
+## Deploying to Vercel
 
-Set `NEXT_PUBLIC_SITE_URL` in the host's environment (see `.env.example`).
+1. Import the repository in Vercel. The framework preset (Next.js) and the defaults
+   (`npm run build`, Node 20+) are correct; no `vercel.json` is needed.
+2. Optional: set `NEXT_PUBLIC_SITE_URL` (see `.env.example`) once a custom domain exists.
+   Until then canonical URLs, Open Graph and the sitemap use Vercel's production domain.
+3. No secrets are required. Security headers (CSP, HSTS, frame and referrer policy) are set
+   in `next.config.ts`.
 
 ## Verification
+
+`npm run audit` (against `next start -p 3100`) is the release audit: every route at
+320 / 390 / 768 / 1440 / 1920 px in both themes (overflow, console and CSP errors), page
+metadata, every internal link and media file, external links, card video behaviour (lazy
+loading, hover, viewport, reduced motion) and the case-study films.
 
 `scripts/verify.mjs` renders every route at 1440, 820 and 390 px wide and fails on any
 console error, horizontal overflow, or axe-core WCAG 2.1 AA violation, then exercises the
@@ -76,8 +95,9 @@ validation and focus, the skip link, and the mobile menu (scroll lock, Escape).
 
 ## Decisions worth knowing
 
-- **No animation library.** The site needs one scroll reveal. Motion cost ~40 KB on every
-  page that used it; a 40-line component does the same.
+- **No animation library.** Reveals, word rises, the media reveal and the spotlight are CSS
+  driven by a few lines of JS; page transitions use the View Transitions API where it exists
+  and fall back to ordinary navigation. A motion library would cost ~40 KB per page.
 - **Reveals check position, not intersection.** An IntersectionObserver misses elements the
   page jumps past (anchor links, Back restoring scroll), which would leave them hidden.
   Content is only hidden while JS can reveal it, and never in print.

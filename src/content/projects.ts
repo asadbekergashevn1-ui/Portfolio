@@ -136,7 +136,7 @@ const authored: Project[] = [
     benefits: [
       { title: 'No more evening audits', detail: 'The owner gets one clear verdict per lesson instead of scrolling through every group.' },
       { title: 'Fair to teachers', detail: 'Early, on time, late or not set — measured against each class’s own schedule, never a guess.' },
-      { title: 'Accountability without micromanagement', detail: 'A weekly score per group shows the pattern at a glance, and teachers see the same report.' },
+      { title: 'Accountability without micromanagement', detail: 'A progress board per group shows the pattern at a glance, and teachers see every report as it is written.' },
       { title: 'Invisible in the classroom', detail: 'It only reads. It never writes to a teacher’s group, so classes carry on exactly as before.' },
       { title: 'Keeps working when AI doesn’t', detail: 'If a model fails, COMA routes around it and re-checks later, rather than guessing.' },
     ],

@@ -10,6 +10,8 @@ import { StatusDot, statusLabel } from '@/components/status-dot';
 import { categoryName } from '@/content/categories';
 import { getProject, sortedProjects } from '@/content/projects';
 import type { ProjectLink } from '@/content/types';
+import { profile } from '@/content/profile';
+import { siteUrl } from '@/lib/site';
 
 type Params = { slug: string };
 
@@ -25,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title: p.name,
     description: `${p.tagline}. ${p.summary}`,
     alternates: { canonical: `/projects/${p.slug}` },
-    openGraph: { title: p.name, description: p.tagline, type: 'article', images: p.media.poster ? [p.media.poster] : undefined },
+    openGraph: { title: p.name, description: p.tagline, type: 'article', images: [p.media.poster ?? '/opengraph-image'] },
   };
 }
 
@@ -91,6 +93,23 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
 
   return (
     <article className="mx-auto max-w-[1240px] px-5 pt-10 sm:px-8 sm:pt-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'CreativeWork',
+            name: project.name,
+            headline: project.tagline,
+            description: project.summary,
+            url: `${siteUrl}/projects/${project.slug}`,
+            dateCreated: project.year,
+            image: poster ? `${siteUrl}${poster}` : undefined,
+            author: { '@type': 'Person', name: profile.name },
+            keywords: project.stack.flatMap((g) => g.items).join(', '),
+          }).replace(/</g, '\\u003c'),
+        }}
+      />
       <nav aria-label="Breadcrumb" className="mb-10">
         <ol className="label flex flex-wrap items-center gap-2 text-ink-4">
           <li><Link href="/projects" className="hover:text-ink">Work</Link></li>

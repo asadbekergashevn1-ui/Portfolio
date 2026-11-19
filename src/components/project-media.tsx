@@ -19,8 +19,8 @@ type Props = {
  * - Desktop (fine pointer + hover): muted clip plays while the card is hovered or focused.
  * - Touch: plays while at least 60% of it is on screen, pauses when it leaves.
  * - prefers-reduced-motion: never autoplays; the poster stays.
- * - The video source is attached only when the card nears the viewport, so a grid
- *   of cards never downloads every clip at once.
+ * - The video source is attached on desktop at the first hover/focus, on touch when
+ *   the card nears the viewport — a grid of cards never downloads every clip at once.
  * - No clip yet: a typographic panel, which the design system treats as a
  *   first-class state rather than a missing image.
  */
@@ -36,10 +36,21 @@ export function ProjectMedia({ project, priority = false, sizes = '(min-width: 1
   const hasVideo = Boolean(video) && !failed;
   const shown = useShown(wrapRef);
 
-  // Attach the source only when the card is about to be seen.
+  // Attach the source only when it can play: on desktop at the first hover or focus
+  // (that is the only time it plays), on touch when the card is about to be seen.
   useEffect(() => {
     if (!hasVideo || !wrapRef.current) return;
     const el = wrapRef.current;
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const card = (el.closest('[data-card]') as HTMLElement | null) ?? el;
+      const attach = () => setNear(true);
+      card.addEventListener('pointerenter', attach, { once: true });
+      card.addEventListener('focusin', attach, { once: true });
+      return () => {
+        card.removeEventListener('pointerenter', attach);
+        card.removeEventListener('focusin', attach);
+      };
+    }
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -74,6 +85,8 @@ export function ProjectMedia({ project, priority = false, sizes = '(min-width: 1
     const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     if (finePointer) {
       const card = (wrap.closest('[data-card]') as HTMLElement | null) ?? wrap;
+      // the source was attached by this hover: start now rather than wait for the next one
+      if (card.matches(':hover') || card.contains(document.activeElement)) play();
       card.addEventListener('mouseenter', play);
       card.addEventListener('mouseleave', pause);
       card.addEventListener('focusin', play);

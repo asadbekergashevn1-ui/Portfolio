@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Reveal } from '@/components/reveal';
 import { profile } from '@/content/profile';
 
 export const metadata: Metadata = {
@@ -24,10 +23,9 @@ export default function AboutPage() {
 
       <div className="mt-16 grid gap-16 border-t border-line pt-14 lg:grid-cols-[1fr_20rem]">
         <div className="space-y-7">
+          {/* above the fold at every width: painted with the page, not revealed by JS */}
           {profile.about.map((para, i) => (
-            <Reveal key={i} delay={i * 0.05}>
-              <p className="pretty measure text-[1.0625rem] leading-[1.8] text-ink-2">{para}</p>
-            </Reveal>
+            <p key={i} className="pretty measure text-[1.0625rem] leading-[1.8] text-ink-2">{para}</p>
           ))}
         </div>
 

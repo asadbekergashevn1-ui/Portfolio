@@ -36,6 +36,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: profile.name,
+              jobTitle: profile.role,
+              url: siteUrl,
+              address: { '@type': 'PostalAddress', addressLocality: 'Termiz', addressCountry: 'UZ' },
+              sameAs: profile.contact.filter((c) => c.kind === 'github').map((c) => c.href),
+            }).replace(/</g, '\\u003c'),
+          }}
+        />
         <a href="#main" className="skip-link">Skip to content</a>
         <SiteHeader />
         <main id="main" tabIndex={-1} className="outline-none">

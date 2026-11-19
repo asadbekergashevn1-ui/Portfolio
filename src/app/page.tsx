@@ -8,6 +8,8 @@ import { categories } from '@/content/categories';
 import { profile } from '@/content/profile';
 import { featuredProjects, projectsByCategory, sortedProjects } from '@/content/projects';
 
+export const metadata = { alternates: { canonical: '/' } };
+
 const shippedCount = sortedProjects().length;
 const categoryCount = categories.filter((c) => projectsByCategory(c.slug).length).length;
 

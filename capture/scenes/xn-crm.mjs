@@ -20,7 +20,9 @@ export default {
     page.setDefaultTimeout(10000);
     await page.getByText(/Use another login|Boshqa login/).click();
     await page.locator('input:visible:not([type=radio])').first().fill('director@jony.demo.xn.uz');
-    await page.locator('input[type=password]').fill('DemoPass-2026');
+    // the local demo seed's password (DEMO_PASSWORD when seeding); never a real account
+    if (!process.env.XN_DEMO_PASSWORD) throw new Error('set XN_DEMO_PASSWORD to the local demo seed password');
+    await page.locator('input[type=password]').fill(process.env.XN_DEMO_PASSWORD);
     await page.keyboard.press('Enter');
     await page.waitForURL((u) => !/login/.test(u.pathname));
     await page.waitForTimeout(1200);
