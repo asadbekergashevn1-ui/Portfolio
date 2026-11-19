@@ -207,6 +207,13 @@
       },
       {
         "src": "/media/xn-crm/shot-04.webp",
+        "alt": "XN CRM attendance report: present, late and absent by day",
+        "caption": "Attendance by day, group and student",
+        "width": 2160,
+        "height": 1350
+      },
+      {
+        "src": "/media/xn-crm/shot-05.webp",
         "alt": "XN CRM cash flow report with daily income and running balance",
         "caption": "Cash flow, day by day",
         "width": 2160,

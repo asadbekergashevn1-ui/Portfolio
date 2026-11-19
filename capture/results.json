@@ -130,22 +130,24 @@
     "status": "captured",
     "scene": "xn-crm",
     "source": "http://localhost:5173/login",
-    "shows": "The director’s dashboard, groups filling up, a debt collected from the largest debtor and the books updating, the weekly timetable and cash flow.",
-    "demoSeconds": 34.4,
+    "shows": "A quick tour: the director’s dashboard, groups, students, finance and debts, the weekly timetable, attendance, cash flow and analytics.",
+    "demoSeconds": 14.6,
     "previewSeconds": 8,
     "shots": [
       "dashboard",
       "groups",
-      "payment",
+      "students",
+      "finance",
       "schedule",
-      "cashflow"
+      "attendance",
+      "cashflow",
+      "analytics"
     ],
-    "stills": 4,
+    "stills": 5,
     "blockedWrites": [],
     "blockedHosts": [],
     "notes": [
-      "Recorded from the real application running locally against a throwaway database. Every school, student, family and phone number on screen is invented demo data.",
-      "The payment taken on camera is processed by the real application — against that demo database, never production."
+      "Recorded from the real application running locally against a throwaway database. Every school, student, family and phone number on screen is invented demo data."
     ],
     "errors": []
   },
