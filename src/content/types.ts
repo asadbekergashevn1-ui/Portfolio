@@ -56,8 +56,13 @@ export interface Screenshot {
  * which the design system treats as a first-class state, not an error.
  */
 export interface ProjectMedia {
+  /** 'recording' = captured from the running product; 'motion' = rendered explainer for work with no UI. */
+  kind?: 'recording' | 'motion';
   poster: string | null;
+  /** Short muted loop for cards. */
   video: { src: string; type: string } | null;
+  /** Full walkthrough for the case study, played with controls. */
+  demo?: { src: string; type: string } | null;
   screenshots: Screenshot[];
   /** Why no capture exists yet, surfaced in the capture report. */
   captureBlocker?: string;

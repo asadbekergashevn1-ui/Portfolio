@@ -7,8 +7,11 @@ import { categories } from '@/content/categories';
 import { profile } from '@/content/profile';
 import { featuredProjects, projectsByCategory, sortedProjects } from '@/content/projects';
 
+const shippedCount = sortedProjects().length;
+const categoryCount = categories.filter((c) => projectsByCategory(c.slug).length).length;
+
 const HEADLINE_METRICS = [
-  { value: '12', label: 'products shipped', note: 'six categories' },
+  { value: String(shippedCount), label: 'products shipped', note: `${categoryCount} categories` },
   { value: '205k', label: 'lines of code', note: 'counted, not estimated' },
   { value: '5', label: 'production databases', note: 'PostgreSQL and Supabase' },
   { value: '72', label: 'deploys on one site', note: 'and still shipping' },

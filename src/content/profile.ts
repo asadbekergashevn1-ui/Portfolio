@@ -11,7 +11,7 @@ export const profile: Profile = {
   available: true,
   headline: 'I build systems that other people’s businesses run on.',
   intro: [
-    'Twelve products in production: a multi-tenant CRM handling a school’s money and payroll, an unattended agent auditing teachers over Telegram, dispatch software that puts children in the right car.',
+    'Ten products shipped: a multi-tenant CRM handling a school’s money and payroll, an unattended agent auditing teachers over Telegram, dispatch software that puts children in the right car.',
     'Not prototypes. They hold real data and fail in real ways — which is the part I design for.',
   ],
   about: [

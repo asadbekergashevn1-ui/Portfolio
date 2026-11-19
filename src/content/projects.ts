@@ -1,11 +1,15 @@
-import type { Project } from './types';
+import captured from './media.generated.json';
+import type { Project, ProjectMedia } from './types';
+
+type CapturedMedia = Partial<ProjectMedia> & { capturedFrom?: string; capturedAt?: string };
+const media = captured as Record<string, CapturedMedia>;
 
 /**
  * The work. Figures here were measured from the repositories — lines of code,
  * migrations, policies — never estimated. If a number cannot be verified it is
  * left out rather than rounded up.
  */
-export const projects: Project[] = [
+const authored: Project[] = [
   {
     slug: 'xn-crm',
     name: 'XN CRM',
@@ -226,7 +230,7 @@ export const projects: Project[] = [
       { label: 'Live app', href: 'https://motionsites-seven.vercel.app', kind: 'live', access: 'public', note: 'Sign-in required to save; the interface is browsable.' },
       { label: 'Source on GitHub', href: 'https://github.com/asadbekergashevn1-ui/motionsites', kind: 'repo', access: 'public' },
     ],
-    media: { poster: null, video: null, screenshots: [] },
+    media: { poster: null, video: null, screenshots: [], captureBlocker: 'The public build opens on sign-in, and the only way past it is a real account on the production database.' },
   },
 
   {
@@ -240,23 +244,29 @@ export const projects: Project[] = [
     featured: true,
     role: 'Design and build',
     summary:
-      'An English vocabulary trainer built on active recall, spaced repetition and sentence practice, installable as an app.',
+      'A vocabulary trainer that turns a word list from any document into flashcards, objective tests and sentence practice, and tracks what has actually been learned. It runs entirely in the browser.',
     problem:
-      'Most vocabulary apps measure exposure. Exposure is not retention — recall under slight difficulty is, and the interval between attempts is what decides whether a word survives.',
+      'Most vocabulary apps measure exposure. Exposure is not retention — recall under slight difficulty is, and a learner needs to see which words are slipping, not how many they have looked at.',
     approach:
-      'Cards are scheduled by a spaced-repetition interval rather than a fixed list, and each word is practised in a sentence as well as in isolation, so it is learned in use.',
+      'Import is paste-first: a list of words on one side, translations on the other, synonyms and definitions optional, and numbered lists are matched by number so a definition that wraps across lines never misaligns. Each word can then be learned three ways — by definition, translation or synonym — and practised four ways: flashcards with self-rating, multiple choice, typed answers and a weak-words review.',
     outcome:
-      'Live and installable. Its source is not yet in version control — recovering it is the next task on this project.',
+      'Live and installable, with no account and no server: nothing a learner imports leaves their device. Its source is not yet in version control — recovering it is the next task on this project.',
     features: [
-      { title: 'Active recall', detail: 'The answer is produced before it is revealed, not recognised from a list.' },
-      { title: 'Spaced repetition', detail: 'Review intervals stretch as a word is recalled correctly and collapse when it is missed.' },
-      { title: 'Sentence practice', detail: 'Each word is also drilled in context so it transfers into use.' },
-      { title: 'Installable', detail: 'A service worker makes it an offline-capable app on a phone home screen.' },
+      { title: 'Paste-first import', detail: 'Two lists side by side — words and translations — with optional synonyms and definitions, a live preview of matched pairs, and duplicate handling.' },
+      { title: 'Numbered alignment', detail: 'Numbered lists are matched by number, so entries that wrap over several lines still pair up correctly.' },
+      { title: 'Three things to learn', detail: 'Choose definitions, translations or synonyms as the side being recalled.' },
+      { title: 'Four ways to practise', detail: 'Flashcards with “knew it / needs practice”, multiple choice, typed answers, and a review of weak words only.' },
+      { title: 'Progress from real activity', detail: 'Accuracy, tests taken, reviews and word states — new, learning, review, mastered — are all computed from what the learner actually did.' },
+      { title: 'Private by construction', detail: 'Everything stays in the browser. Recording it for this site, no request ever left the page.' },
     ],
     stack: [
       { group: 'Application', items: ['Vite', 'TypeScript', 'PWA'] },
+      { group: 'Storage', items: ['In-browser only', 'No account, no server'] },
     ],
-    metrics: [{ value: 'PWA', label: 'installable' }],
+    metrics: [
+      { value: '4', label: 'practice modes' },
+      { value: '0', label: 'requests to a server' },
+    ],
     links: [{ label: 'Live app', href: 'https://flashy-tan.vercel.app', kind: 'live', access: 'public' }],
     media: { poster: null, video: null, screenshots: [] },
   },
@@ -339,44 +349,6 @@ export const projects: Project[] = [
     media: { poster: null, video: null, screenshots: [] },
   },
 
-  {
-    slug: 'b2-path-calculator',
-    name: 'B2 Path Calculator',
-    tagline: 'How many hours to B2 — and it admits what it cannot know',
-    category: 'education',
-    status: 'live',
-    year: '2026',
-    order: 9,
-    featured: false,
-    role: 'Method and build',
-    client: 'Jony Kids English, Termiz',
-    summary:
-      'A teacher-facing tool that converts a placement result and two rubric judgements into an estimated date for B1 and B2, and recalibrates against the student’s own measured growth.',
-    problem:
-      'Parents ask when their child will reach B2. Staff were answering from intuition, and an intuition stated as a date becomes a promise.',
-    approach:
-      'Each level is given an hours-to-reach figure. Reading and grammar come from the test with the guessing probability subtracted; speaking and writing come from a rubric the teacher applies. The overall level is set by the weakest skill, because exams require all four. Hours remaining are divided by real teaching hours adjusted for attendance.',
-    outcome:
-      'In use by teachers and a methodologist. The page states its own limitations on screen and prints to PDF for the parent meeting.',
-    features: [
-      { title: 'Weakest-skill rule', detail: 'Overall level is set by the lowest skill, not the average — which is how multi-skill exams actually work.' },
-      { title: 'Guess correction', detail: 'The 25% chance of guessing a four-option question is subtracted before partial credit is given.' },
-      { title: 'Self-calibration', detail: 'Given a previous result and date, it computes the child’s real growth rate and uses that instead of the generic coefficient.' },
-      { title: 'States its limits', detail: 'The page says in plain language that it is untested, has no listening section, is not an official level, and that no date should be promised to a parent.' },
-      { title: 'Stores nothing', detail: 'Entirely client-side. No data leaves the browser.' },
-    ],
-    stack: [{ group: 'Build', items: ['Hand-written HTML, CSS and JS', 'Single file', 'Print stylesheet'] }],
-    metrics: [
-      { value: '44', label: 'test items' },
-      { value: '4', label: 'skills modelled' },
-      { value: '1', label: 'file' },
-    ],
-    links: [
-      { label: 'Calculator', href: 'https://jke-natija-hisob.vercel.app', kind: 'live', access: 'public' },
-      { label: 'Placement test', href: 'https://jke-level-test.vercel.app', kind: 'live', access: 'public' },
-    ],
-    media: { poster: null, video: null, screenshots: [] },
-  },
 
   {
     slug: 'link-board',
@@ -412,7 +384,7 @@ export const projects: Project[] = [
       { value: '5', label: 'security headers' },
     ],
     links: [{ label: 'Live app', href: 'https://link-board-two.vercel.app', kind: 'live', access: 'public', note: 'Sign-in required to see saved links.' }],
-    media: { poster: null, video: null, screenshots: [] },
+    media: { poster: null, video: null, screenshots: [], captureBlocker: 'Opens on phone-and-PIN sign-in; creating an account to record it would write to the production database.' },
   },
 
   {
@@ -447,38 +419,25 @@ export const projects: Project[] = [
     media: { poster: null, video: null, screenshots: [] },
   },
 
-  {
-    slug: 'jke-level-test',
-    name: 'JKE Level Test',
-    tagline: 'Placement in forty-four questions',
-    category: 'education',
-    status: 'live',
-    year: '2026',
-    order: 12,
-    featured: false,
-    role: 'Method and build',
-    client: 'Jony Kids English, Termiz',
-    summary:
-      'The student-facing half of the placement system: a forty-four item test that ends by issuing a code the teacher pastes into the calculator.',
-    problem:
-      'A placement test and the decision made from it usually live in two disconnected places, and the link between them is a teacher’s memory.',
-    approach:
-      'The test issues a compact code carrying every answer. Nothing is stored and nothing is transmitted; the code is the record, and it travels with the student to the teacher.',
-    outcome: 'In use alongside the calculator as one workflow.',
-    features: [
-      { title: 'Code as the record', detail: 'All answers are encoded into one short string, so no database is needed and no personal data is held.' },
-      { title: 'Four levels in one sitting', detail: 'Grammar and reading items spanning A1 to B2, eleven per level.' },
-      { title: 'Unindexed', detail: 'Excluded from search engines as an internal tool.' },
-    ],
-    stack: [{ group: 'Build', items: ['Hand-written HTML, CSS and JS'] }],
-    metrics: [
-      { value: '44', label: 'items' },
-      { value: '4', label: 'levels' },
-    ],
-    links: [{ label: 'Take the test', href: 'https://jke-level-test.vercel.app', kind: 'live', access: 'public' }],
-    media: { poster: null, video: null, screenshots: [] },
-  },
 ];
+
+/** Hand-written content, with whatever the capture pipeline has produced layered over its media. */
+export const projects: Project[] = authored.map((p) => {
+  const m = media[p.slug];
+  if (!m) return p;
+  return {
+    ...p,
+    media: {
+      ...p.media,
+      kind: m.kind ?? 'recording',
+      poster: m.poster ?? p.media.poster,
+      video: m.video ?? p.media.video,
+      demo: m.demo ?? null,
+      screenshots: m.screenshots?.length ? m.screenshots : p.media.screenshots,
+      captureBlocker: undefined,
+    },
+  };
+});
 
 export const visibleProjects = projects.filter((p) => !p.draft);
 

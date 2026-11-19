@@ -1,0 +1,153 @@
+{
+  "jony-kids-english": {
+    "status": "captured",
+    "scene": "jony-kids-english",
+    "source": "https://jonykids.uz/",
+    "shows": "The hero, the course cards, the results carousel, the price plans and the sign-up modal — filled, never sent.",
+    "demoSeconds": 17.7,
+    "previewSeconds": 8,
+    "shots": [
+      "hero",
+      "courses",
+      "results",
+      "pricing",
+      "form"
+    ],
+    "stills": 3,
+    "blockedWrites": [],
+    "blockedHosts": [],
+    "notes": [
+      "Parent review screenshots are blurred during capture and kept out of frame.",
+      "The sign-up form is filled with sample values and never submitted; all writes were blocked."
+    ],
+    "errors": []
+  },
+  "level-up": {
+    "status": "captured",
+    "scene": "level-up",
+    "source": "https://lu-demo-nine.vercel.app/",
+    "shows": "The pinned hero panels, the results counting up beside the radar, the 3D result-card stack and the growth path.",
+    "demoSeconds": 17.1,
+    "previewSeconds": 8,
+    "shots": [
+      "hero",
+      "results",
+      "cards",
+      "growth"
+    ],
+    "stills": 2,
+    "blockedWrites": [],
+    "blockedHosts": [],
+    "notes": [],
+    "errors": []
+  },
+  "jony-math": {
+    "status": "captured",
+    "scene": "jony-math",
+    "source": "https://jony-math-bepul-kurs.vercel.app/",
+    "shows": "The interactive multiplication table in the hero, the ten outcomes, the four-week plan and the sign-up form.",
+    "demoSeconds": 16,
+    "previewSeconds": 8,
+    "shots": [
+      "table",
+      "outcomes",
+      "weeks",
+      "form"
+    ],
+    "stills": 2,
+    "blockedWrites": [],
+    "blockedHosts": [],
+    "notes": [
+      "The sign-up form is filled with sample values and never submitted; all writes were blocked."
+    ],
+    "errors": []
+  },
+  "flashy": {
+    "status": "captured",
+    "scene": "flashy",
+    "source": "https://flashy-tan.vercel.app/import",
+    "shows": "A dashboard filled by real study sessions, a flashcard round with self-rating, a multiple-choice test with feedback, and progress.",
+    "demoSeconds": 33.7,
+    "previewSeconds": 8,
+    "shots": [
+      "dashboard",
+      "flashcards",
+      "quiz",
+      "progress"
+    ],
+    "stills": 3,
+    "blockedWrites": [],
+    "blockedHosts": [],
+    "notes": [
+      "Seeded with FLASHY’s own built-in sample set through the real import screen. The statistics shown come from flashcard and quiz sessions actually run in the app before recording."
+    ],
+    "errors": []
+  },
+  "brain-train": {
+    "status": "captured",
+    "scene": "brain-train",
+    "source": "https://desktop-tutorial-eight-lovat.vercel.app/",
+    "shows": "The mascot welcome, choosing an age, the whole app re-theming as colours are picked, and choosing subjects.",
+    "demoSeconds": 23.8,
+    "previewSeconds": 8,
+    "shots": [
+      "welcome",
+      "about-you",
+      "colour",
+      "subjects"
+    ],
+    "stills": 2,
+    "blockedWrites": [],
+    "blockedHosts": [],
+    "notes": [],
+    "errors": []
+  },
+  "coma": {
+    "status": "captured",
+    "scene": "motion/coma",
+    "source": "capture/motion/coma/scene.html",
+    "shows": "A motion piece built from COMA’s real rules: the schedule read from a group title, the homework window, the roll-call trap, the verdict and the weekly score.",
+    "demoSeconds": 28,
+    "previewSeconds": 8,
+    "shots": [
+      "S1 title",
+      "S2 window",
+      "S3 arrivals",
+      "S4 decision",
+      "S5 week",
+      "S6 end"
+    ],
+    "stills": 0,
+    "blockedWrites": [],
+    "blockedHosts": [],
+    "notes": [
+      "No user interface exists to record. Rendered from capture/motion/coma; message texts are illustrative and labelled so on screen, rules and figures come from the code and its tests.",
+      "Silent by decision: no one has listened to a soundtrack for it yet."
+    ],
+    "errors": []
+  },
+  "xn-crm": {
+    "status": "unavailable",
+    "slug": "xn-crm",
+    "reason": "Self-hosted behind a quick tunnel with no stable public address; its one hosted build is blocked. The staff console needs a seeded tenant to show anything.",
+    "needs": "A demo deployment with a seeded demo tenant (students, payments, attendance), or permission to run its Docker stack here on throwaway data."
+  },
+  "jony-taxi": {
+    "status": "unavailable",
+    "slug": "jony-taxi",
+    "reason": "Every screen past sign-in needs a Supabase project with its 27 migrations applied; the public build is only the sign-in screen.",
+    "needs": "A throwaway Supabase project with the migrations and seed applied, plus a demo driver and a demo parent account."
+  },
+  "ish-ritmi": {
+    "status": "unavailable",
+    "slug": "ish-ritmi",
+    "reason": "The public build opens on sign-in; getting past it means a real account on the production database.",
+    "needs": "A demo account, or a build pointed at a throwaway Supabase project."
+  },
+  "link-board": {
+    "status": "unavailable",
+    "slug": "link-board",
+    "reason": "Opens on phone-and-PIN sign-in; signing up to record it would write to the production database.",
+    "needs": "A demo account with a few saved links."
+  }
+}

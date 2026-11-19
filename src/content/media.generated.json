@@ -1,0 +1,176 @@
+{
+  "jony-kids-english": {
+    "poster": "/media/jony-kids-english/poster.webp",
+    "video": {
+      "src": "/media/jony-kids-english/preview.mp4",
+      "type": "video/mp4"
+    },
+    "demo": {
+      "src": "/media/jony-kids-english/demo.mp4",
+      "type": "video/mp4"
+    },
+    "screenshots": [
+      {
+        "src": "/media/jony-kids-english/shot-01.webp",
+        "alt": "Jony Kids English price plans",
+        "caption": "Three plans and the bonuses that come with them",
+        "width": 2160,
+        "height": 1350
+      },
+      {
+        "src": "/media/jony-kids-english/shot-02.webp",
+        "alt": "Jony Kids English free trial lesson sign-up",
+        "caption": "The sign-up that writes to the database and pings staff on Telegram",
+        "width": 2160,
+        "height": 1350
+      },
+      {
+        "src": "/media/jony-kids-english/shot-03.webp",
+        "alt": "Jony Kids English home page hero",
+        "caption": "The landing page on jonykids.uz",
+        "width": 2160,
+        "height": 1350
+      }
+    ],
+    "capturedFrom": "https://jonykids.uz/",
+    "capturedAt": "2026-11-19"
+  },
+  "level-up": {
+    "poster": "/media/level-up/poster.webp",
+    "video": {
+      "src": "/media/level-up/preview.mp4",
+      "type": "video/mp4"
+    },
+    "demo": {
+      "src": "/media/level-up/demo.mp4",
+      "type": "video/mp4"
+    },
+    "screenshots": [
+      {
+        "src": "/media/level-up/shot-01.webp",
+        "alt": "LEVEL UP results section with counters and radar",
+        "caption": "Results count up as they arrive on screen",
+        "width": 2160,
+        "height": 1350
+      },
+      {
+        "src": "/media/level-up/shot-02.webp",
+        "alt": "LEVEL UP student result cards",
+        "caption": "Student results as a rotating card stack",
+        "width": 2160,
+        "height": 1350
+      }
+    ],
+    "capturedFrom": "https://lu-demo-nine.vercel.app/",
+    "capturedAt": "2026-11-19"
+  },
+  "jony-math": {
+    "poster": "/media/jony-math/poster.webp",
+    "video": {
+      "src": "/media/jony-math/preview.mp4",
+      "type": "video/mp4"
+    },
+    "demo": {
+      "src": "/media/jony-math/demo.mp4",
+      "type": "video/mp4"
+    },
+    "screenshots": [
+      {
+        "src": "/media/jony-math/shot-01.webp",
+        "alt": "Jony Math hero with the interactive multiplication table",
+        "caption": "The hero is a working multiplication table",
+        "width": 2160,
+        "height": 1350
+      },
+      {
+        "src": "/media/jony-math/shot-02.webp",
+        "alt": "Ten things the child will be able to do",
+        "caption": "Ten concrete outcomes, not a syllabus",
+        "width": 2160,
+        "height": 1350
+      }
+    ],
+    "capturedFrom": "https://jony-math-bepul-kurs.vercel.app/",
+    "capturedAt": "2026-11-19"
+  },
+  "flashy": {
+    "poster": "/media/flashy/poster.webp",
+    "video": {
+      "src": "/media/flashy/preview.mp4",
+      "type": "video/mp4"
+    },
+    "demo": {
+      "src": "/media/flashy/demo.mp4",
+      "type": "video/mp4"
+    },
+    "screenshots": [
+      {
+        "src": "/media/flashy/shot-01.webp",
+        "alt": "FLASHY dashboard after real study sessions",
+        "caption": "The dashboard after one flashcard round and one test",
+        "width": 2160,
+        "height": 1350
+      },
+      {
+        "src": "/media/flashy/shot-02.webp",
+        "alt": "A FLASHY flashcard",
+        "caption": "Recall first, then reveal and rate yourself",
+        "width": 2160,
+        "height": 1350
+      },
+      {
+        "src": "/media/flashy/shot-03.webp",
+        "alt": "FLASHY progress and statistics",
+        "caption": "Accuracy and word states, computed from real activity",
+        "width": 2160,
+        "height": 1350
+      }
+    ],
+    "capturedFrom": "https://flashy-tan.vercel.app/import",
+    "capturedAt": "2026-11-19"
+  },
+  "brain-train": {
+    "poster": "/media/brain-train/poster.webp",
+    "video": {
+      "src": "/media/brain-train/preview.mp4",
+      "type": "video/mp4"
+    },
+    "demo": {
+      "src": "/media/brain-train/demo.mp4",
+      "type": "video/mp4"
+    },
+    "screenshots": [
+      {
+        "src": "/media/brain-train/shot-01.webp",
+        "alt": "Brain Train colour picker re-theming the app",
+        "caption": "The chosen colour re-themes every screen that follows",
+        "width": 2160,
+        "height": 1350
+      },
+      {
+        "src": "/media/brain-train/shot-02.webp",
+        "alt": "Brain Train subject choice",
+        "caption": "Subjects, multi-select, in the child’s chosen colour",
+        "width": 2160,
+        "height": 1350
+      }
+    ],
+    "capturedFrom": "https://desktop-tutorial-eight-lovat.vercel.app/",
+    "capturedAt": "2026-11-19"
+  },
+  "coma": {
+    "kind": "motion",
+    "poster": "/media/coma/poster.webp",
+    "video": {
+      "src": "/media/coma/preview.mp4",
+      "type": "video/mp4"
+    },
+    "demo": {
+      "src": "/media/coma/demo.mp4",
+      "type": "video/mp4"
+    },
+    "screenshots": [],
+    "capturedFrom": "capture/motion/coma",
+    "capturedAt": "2026-11-19"
+  }
+}

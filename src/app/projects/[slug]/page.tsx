@@ -67,7 +67,8 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
   const idx = list.findIndex((p) => p.slug === project.slug);
   const prev = list[(idx - 1 + list.length) % list.length];
   const next = list[(idx + 1) % list.length];
-  const { video, screenshots, poster } = project.media;
+  const { video, demo, screenshots, poster, kind } = project.media;
+  const film = demo ?? video;
 
   const story = [
     { id: 'problem', title: 'The problem', body: project.problem },
@@ -115,15 +116,18 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
 
       {/* No capture yet: skip the panel entirely. The metric tiles below carry the
           page, and an empty full-width rectangle is the one thing Signal forbids. */}
-      {video || poster || screenshots.length ? (
+      {film || poster || screenshots.length ? (
       <section className="mt-6" aria-label="Product media">
-        {video ? (
+        {film ? (
           <figure className="card overflow-hidden">
             <video controls playsInline preload="none" poster={poster ?? undefined} className="block aspect-[16/10] w-full bg-sunken object-cover">
-              <source src={video.src} type={video.type} />
+              <source src={film.src} type={film.type} />
               Your browser cannot play this video.
             </video>
-            <figcaption className="label border-t border-line px-5 py-3 text-ink-4">Recorded from the running product</figcaption>
+            <figcaption className="label flex flex-wrap justify-between gap-2 border-t border-line px-5 py-3 text-ink-4">
+              <span>{kind === 'motion' ? 'Motion piece — this project has no screen to record' : 'Recorded from the running product'}</span>
+              <span>No sound</span>
+            </figcaption>
           </figure>
         ) : (
           <div className="card overflow-hidden">
@@ -162,7 +166,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
             </ul>
           </section>
 
-          {screenshots.length > 1 ? (
+          {screenshots.length > 0 ? (
             <section aria-labelledby="shots-h">
               <h2 id="shots-h" className="label mb-6 text-accent">Screens</h2>
               <ul className="grid gap-5 sm:grid-cols-2">

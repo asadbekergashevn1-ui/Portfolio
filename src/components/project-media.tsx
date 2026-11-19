@@ -18,8 +18,8 @@ type Props = {
  * - Desktop (fine pointer + hover): muted clip plays while the card is hovered or focused.
  * - Touch: plays while at least 60% of it is on screen, pauses when it leaves.
  * - prefers-reduced-motion: never autoplays; the poster stays.
- * - The video source is attached only when the card nears the viewport, so twelve
- *   cards never cost twelve downloads.
+ * - The video source is attached only when the card nears the viewport, so a grid
+ *   of cards never downloads every clip at once.
  * - No clip yet: a typographic panel, which the design system treats as a
  *   first-class state rather than a missing image.
  */

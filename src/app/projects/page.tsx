@@ -6,7 +6,7 @@ import { sortedProjects } from '@/content/projects';
 
 export const metadata: Metadata = {
   title: 'Work',
-  description: 'Twelve products in production — CRM, automation agents, mobile apps, education tools and websites — with measured figures for each.',
+  description: 'Products shipped across CRM, automation, mobile, education and websites — with measured figures for each.',
   alternates: { canonical: '/projects' },
 };
 
