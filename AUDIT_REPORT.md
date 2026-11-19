@@ -24,6 +24,7 @@ end, under **Needs you**.
 | SEO | Title, description, canonical, Open Graph image and a single `h1` on every page; sitemap, robots, JSON-LD (Person site-wide, CreativeWork per case study) | ✅ after fixes (below) |
 | Broken links | Every internal link (42) and media file (45) fetched | ✅ all resolve; 404 page returns 404 |
 | External links | All 11 fetched through the environment's proxy | 8 × 200; 3 could not be reached **from this sandbox** (see Needs you) |
+| Dependencies | `npm audit` (production) | Next.js upgraded 15.5.4 → 15.5.29 and React 19.1.1 → 19.1.10 (CVE-2025-66478 — Vercel refused to build the old version). Remaining: PostCSS inside Next (build-time only, processes this site's own CSS) and sharp (processes this site's own images); both need Next 16 / sharp 0.35, a breaking upgrade left for later |
 | Security | CSP, HSTS, `X-Frame-Options: DENY`, `nosniff`, referrer and permissions policy; no third-party requests; secret scan of every tracked file | ✅ no keys, tokens or real phone numbers |
 | Private data in media | Every film and still reviewed | ✅ parent reviews blurred (Jony Kids); XN CRM recorded on invented demo data; COMA messages are illustrative and labelled |
 | Content accuracy | Figures re-checked against the repositories; unverifiable claims removed; client-reported results attributed | ✅ (list below) |
