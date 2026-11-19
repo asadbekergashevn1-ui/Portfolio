@@ -9,7 +9,7 @@ export const profile: Profile = {
   role: 'Software engineer',
   location: 'Termiz, Uzbekistan',
   available: true,
-  headline: 'I build the software that brings a business its customers — and keeps everything after that in order.',
+  headline: 'I build software that brings in customers — and keeps the business in order.',
   intro: [
     'Websites that turn visitors into enrolled students. Systems that keep money, payroll, attendance and homework under control without anyone chasing it. Apps that put a working day, or a vocabulary course, into a clear order.',
     'Ten products, all shipped and in use with real data — built so the business can stop worrying about them.',

@@ -46,7 +46,7 @@ export function SiteHeader() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-[color-mix(in_srgb,var(--surface-base)_88%,transparent)] backdrop-blur-xl" data-print-hide>
+    <header data-site-header className="sticky top-0 z-40 border-b border-line bg-[color-mix(in_srgb,var(--surface-base)_88%,transparent)] backdrop-blur-xl" data-print-hide>
       <div className="mx-auto flex h-16 max-w-[1240px] items-center justify-between px-5 sm:px-8">
         <Link href="/" className="group flex items-center gap-3 rounded-md outline-none" aria-label={`${profile.name}, home`}>
           <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-live" style={{ boxShadow: '0 0 0 3px color-mix(in srgb, var(--status-live) 18%, transparent)' }} />

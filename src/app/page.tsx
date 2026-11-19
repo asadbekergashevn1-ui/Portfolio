@@ -3,6 +3,7 @@ import { MetricTile } from '@/components/metric-tile';
 import { ProjectCard } from '@/components/project-card';
 import { Reveal } from '@/components/reveal';
 import { SectionHeading } from '@/components/section-heading';
+import { SplitWords } from '@/components/split-words';
 import { categories } from '@/content/categories';
 import { profile } from '@/content/profile';
 import { featuredProjects, projectsByCategory, sortedProjects } from '@/content/projects';
@@ -30,8 +31,8 @@ export default function HomePage() {
             {profile.available ? 'Available for new work' : 'Currently booked'}
             <span className="hidden sm:inline">· {profile.location}</span>
           </p>
-          <h1 className="display balance max-w-[16ch] text-[clamp(2.5rem,6.4vw,5.25rem)] text-ink">
-            {profile.headline}
+          <h1 aria-label={profile.headline} className="display balance max-w-[18ch] text-[clamp(2.5rem,6.4vw,5.25rem)] text-ink">
+            <SplitWords text={profile.headline} />
           </h1>
           <div className="mt-10 grid gap-6 lg:grid-cols-[1.25fr_1fr] lg:gap-14">
             <p className="pretty measure text-[1.0625rem] leading-[1.7] text-ink-2">{profile.intro[0]}</p>
@@ -41,7 +42,7 @@ export default function HomePage() {
           </div>
           <div className="mt-11 flex flex-wrap gap-3">
             <Link href="/projects" className="label rounded-[var(--radius-md)] bg-accent px-6 py-3.5 font-semibold text-accent-ink transition-opacity hover:opacity-90">
-              See the work
+              See the work <span aria-hidden="true" className="cta-arrow">→</span>
             </Link>
             <Link href="/projects/xn-crm" className="label rounded-[var(--radius-md)] border border-edge px-6 py-3.5 text-ink transition-colors hover:bg-hover">
               Read a case study

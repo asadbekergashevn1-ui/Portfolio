@@ -4,6 +4,7 @@ import '@fontsource-variable/jetbrains-mono';
 import '@fontsource/instrument-serif/400-italic.css';
 import './globals.css';
 import { SiteFooter } from '@/components/site-footer';
+import { MotionLayer } from '@/components/motion-layer';
 import { SiteHeader } from '@/components/site-header';
 import { themeScript } from '@/components/theme-toggle';
 import { profile } from '@/content/profile';
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <SiteFooter />
+        <MotionLayer />
       </body>
     </html>
   );

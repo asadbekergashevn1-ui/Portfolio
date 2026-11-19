@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { MetricTile } from '@/components/metric-tile';
 import { ProjectMedia } from '@/components/project-media';
 import { Reveal } from '@/components/reveal';
+import { SplitWords } from '@/components/split-words';
 import { StatusDot, statusLabel } from '@/components/status-dot';
 import { categoryName } from '@/content/categories';
 import { getProject, sortedProjects } from '@/content/projects';
@@ -105,7 +106,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
           <StatusDot status={project.status} />
           <span className="label text-ink-4">{categoryName(project.category)} · {project.year}</span>
         </div>
-        <h1 className="display mt-6 text-[clamp(2.75rem,6.5vw,5rem)] text-ink">{project.name}</h1>
+        <h1 aria-label={project.name} className="display mt-6 text-[clamp(2.75rem,6.5vw,5rem)] text-ink"><SplitWords text={project.name} /></h1>
         <p className="font-serif balance mt-6 max-w-[34ch] text-[clamp(1.375rem,2.4vw,1.875rem)] italic leading-[1.3] text-accent">
           {project.tagline}.
         </p>
@@ -126,7 +127,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
       {film || poster || screenshots.length ? (
       <section className="mt-6" aria-label="Product media">
         {film ? (
-          <figure className="card overflow-hidden">
+          <figure className="card overflow-hidden" style={{ viewTransitionName: `media-${project.slug}` }}>
             <video controls playsInline preload="none" poster={poster ?? undefined} className="block aspect-[16/10] w-full bg-sunken object-cover">
               <source src={film.src} type={film.type} />
               Your browser cannot play this video.
@@ -137,7 +138,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
             </figcaption>
           </figure>
         ) : (
-          <div className="card overflow-hidden">
+          <div className="card overflow-hidden" style={{ viewTransitionName: `media-${project.slug}` }}>
             <ProjectMedia project={project} priority sizes="(min-width: 1240px) 1180px, 100vw" />
           </div>
         )}

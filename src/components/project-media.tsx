@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import { useShown } from './reveal';
 import type { Project } from '@/content/types';
 
 type Props = {
@@ -33,6 +34,7 @@ export function ProjectMedia({ project, priority = false, sizes = '(min-width: 1
   const { video, poster, screenshots } = project.media;
   const still = poster ?? screenshots[0]?.src ?? null;
   const hasVideo = Boolean(video) && !failed;
+  const shown = useShown(wrapRef);
 
   // Attach the source only when the card is about to be seen.
   useEffect(() => {
@@ -95,9 +97,11 @@ export function ProjectMedia({ project, priority = false, sizes = '(min-width: 1
   return (
     <div
       ref={wrapRef}
-      className={`relative overflow-hidden bg-sunken ${className}`}
+      data-media={project.slug}
+      className={`media-reveal relative overflow-hidden bg-sunken ${shown ? 'is-shown' : ''} ${className}`}
       style={{ aspectRatio: '16 / 10' }}
     >
+      <div className="media-zoom absolute inset-0">
       {still ? (
         <Image
           src={still}
@@ -127,6 +131,7 @@ export function ProjectMedia({ project, priority = false, sizes = '(min-width: 1
           <source src={video.src} type={video.type} />
         </video>
       ) : null}
+      </div>
     </div>
   );
 }

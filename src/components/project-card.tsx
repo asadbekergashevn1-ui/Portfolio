@@ -23,11 +23,14 @@ export function ProjectCard({ project, priority = false, headingLevel = 3 }: { p
           </Link>
         </Heading>
         <p className="pretty mt-2 text-[0.875rem] leading-[1.6] text-ink-3">{project.tagline}</p>
-        <ul className="mt-auto flex flex-wrap gap-1.5 pt-5" aria-label="Technologies">
-          {project.stack.flatMap((g) => g.items).slice(0, 4).map((s) => (
-            <li key={s} className="chip">{s}</li>
-          ))}
-        </ul>
+        <div className="mt-auto flex items-end justify-between gap-4 pt-5">
+          <ul className="flex flex-wrap gap-1.5" aria-label="Technologies">
+            {project.stack.flatMap((g) => g.items).slice(0, 4).map((s) => (
+              <li key={s} className="chip">{s}</li>
+            ))}
+          </ul>
+          <span aria-hidden="true" className="card-cue label shrink-0 text-accent">Case study →</span>
+        </div>
       </div>
     </article>
   );

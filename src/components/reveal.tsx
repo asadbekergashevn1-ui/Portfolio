@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 
 /**
  * Fades and lifts content in once it is on screen or has been scrolled past.
@@ -16,10 +16,9 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
  * at all under reduced motion. No motion library: this is the only scroll
  * animation the site needs and a library would cost ~40 KB per page.
  */
-export function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
+/** True once the element is on screen or has been scrolled past (see Reveal). */
+export function useShown(ref: RefObject<HTMLElement | null>) {
   const [shown, setShown] = useState(false);
-
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -27,7 +26,6 @@ export function Reveal({ children, delay = 0, className = '' }: { children: Reac
       setShown(true);
       return;
     }
-
     let frame = 0;
     const check = () => {
       frame = 0;
@@ -44,13 +42,17 @@ export function Reveal({ children, delay = 0, className = '' }: { children: Reac
       window.removeEventListener('resize', onScroll);
       if (frame) cancelAnimationFrame(frame);
     };
-
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
     check();
     return cleanup;
-  }, []);
+  }, [ref]);
+  return shown;
+}
 
+export function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const shown = useShown(ref);
   return (
     <div ref={ref} className={`reveal ${shown ? 'is-shown' : ''} ${className}`} style={delay ? { transitionDelay: `${delay}s` } : undefined}>
       {children}
