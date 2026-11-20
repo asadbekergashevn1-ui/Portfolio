@@ -16,9 +16,12 @@ const warn = [];
 const ok = (cond, msg, detail = '') => { (cond ? console.log : (m) => { fails.push(m); console.log(m); })(`${cond ? '✓' : '✗'} ${msg}${detail ? `  (${detail})` : ''}`); };
 
 const sitemap = await (await fetch(`${BASE}/sitemap.xml`)).text();
-const routes = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
-routes.push('/does-not-exist');
-console.log(`${routes.length} routes`);
+const all = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
+// Layout and metadata are checked in every language; media and link checks run
+// once (the English set), since the files behind them are shared.
+const routes = [...all, '/does-not-exist'];
+const en = all.filter((p) => !/^\/(ru|uz)(\/|$)/.test(p));
+console.log(`${routes.length} routes across 3 languages`);
 
 const browser = await chromium.launch();
 const links = new Set();
@@ -43,12 +46,17 @@ for (const width of [320, 390, 768, 1440, 1920]) {
       if (res.status() !== 200) fails.push(`${r} → ${res.status()}`);
       const sw = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       if (sw > 0) over.push(`${r} +${sw}px`);
-      if (width === 1440 && theme === 'dark') {
+      if (width === 1440 && theme === 'dark' && en.includes(r)) {
         for (const h of await page.$$eval('a[href]', (as) => as.map((a) => a.href))) (h.startsWith(BASE) ? links : external).add(h);
         for (const s of await page.$$eval('img[src], source[src], video[poster]', (es) => es.map((e) => e.getAttribute('src') || e.getAttribute('poster')))) media.add(new URL(s, BASE).href);
-        const meta = await page.evaluate(() => ({ title: document.title, desc: document.querySelector('meta[name=description]')?.content, canon: document.querySelector('link[rel=canonical]')?.href, og: document.querySelector('meta[property="og:image"]')?.content, h1: document.querySelectorAll('h1').length, ld: document.querySelectorAll('script[type="application/ld+json"]').length }));
+      }
+      if (width === 1440 && theme === 'dark' && r !== '/does-not-exist') {
+        const meta = await page.evaluate(() => ({ title: document.title, desc: document.querySelector('meta[name=description]')?.content, canon: document.querySelector('link[rel=canonical]')?.href, og: document.querySelector('meta[property="og:image"]')?.content, h1: document.querySelectorAll('h1').length, lang: document.documentElement.lang, alts: [...document.querySelectorAll('link[rel=alternate][hreflang]')].map((l) => l.hreflang).sort().join(',') }));
         if (!meta.title || !meta.desc || !meta.og || meta.h1 !== 1) fails.push(`${r} meta: ${JSON.stringify(meta)}`);
         if (!meta.canon) warn.push(`${r}: no canonical`);
+        const expectLang = /^\/ru(\/|$)/.test(r) ? 'ru' : /^\/uz(\/|$)/.test(r) ? 'uz' : 'en';
+        if (meta.lang !== expectLang) fails.push(`${r}: html lang ${meta.lang} ≠ ${expectLang}`);
+        if (meta.alts !== 'en,ru,uz,x-default') fails.push(`${r}: hreflang ${meta.alts}`);
       }
     }
     ok(!over.length, `no horizontal overflow @${width} ${theme}`, over.join(', '));
@@ -58,6 +66,25 @@ for (const width of [320, 390, 768, 1440, 1920]) {
 }
 const metaFails = fails.filter((f) => f.includes('meta:'));
 ok(metaFails.length === 0, 'every page has title, description, og:image and one h1', metaFails.slice(0, 4).join(' | '));
+const langFails = fails.filter((f) => f.includes('html lang') || f.includes('hreflang'));
+ok(langFails.length === 0, 'every page declares its language and links its translations', langFails.slice(0, 4).join(' | '));
+
+// language routing
+{
+  const probes = [
+    ['/en', 308, '/'], ['/en/projects', 308, '/projects'],
+  ];
+  for (const [path, code, to] of probes) {
+    const res = await fetch(BASE + path, { redirect: 'manual' });
+    ok(res.status === code && new URL(res.headers.get('location'), BASE).pathname === to, `${path} redirects to ${to}`, `${res.status} ${res.headers.get('location')}`);
+  }
+  const ru = await fetch(BASE + '/', { redirect: 'manual', headers: { 'accept-language': 'ru-RU,ru;q=0.9' } });
+  ok(ru.status === 307 && (ru.headers.get('location') ?? '').endsWith('/ru'), 'a Russian browser lands on /ru', `${ru.status} ${ru.headers.get('location')}`);
+  const cookie = await fetch(BASE + '/', { redirect: 'manual', headers: { cookie: 'NEXT_LOCALE=uz' } });
+  ok(cookie.status === 307 && (cookie.headers.get('location') ?? '').endsWith('/uz'), 'a saved choice wins over the browser', `${cookie.status} ${cookie.headers.get('location')}`);
+  const plain = await fetch(BASE + '/', { redirect: 'manual', headers: { 'accept-language': 'en-GB,en;q=0.9' } });
+  ok(plain.status === 200, 'an English browser stays on /', String(plain.status));
+}
 
 // 2. internal links and media
 const bad = [];
@@ -122,7 +149,7 @@ console.log('external links:\n  ' + ext.join('\n  '));
 // 5. demo films on case studies
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  const slugs = routes.filter((r) => r.startsWith('/projects/')).map((r) => r.split('/')[2]);
+  const slugs = en.filter((r) => r.startsWith('/projects/')).map((r) => r.split('/')[2]);
   const rows = [];
   for (const s of slugs) {
     await page.goto(`${BASE}/projects/${s}`, { waitUntil: 'networkidle' });

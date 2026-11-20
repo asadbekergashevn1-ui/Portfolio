@@ -85,7 +85,8 @@
 
   --font-sans: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  /* Instrument Serif has no Cyrillic; Lora (italic) supplies those glyphs, per character */
+  --font-serif: 'Instrument Serif', 'Lora Variable', ui-serif, Georgia, serif;
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -149,10 +150,18 @@
     font-weight: 800;
     letter-spacing: -0.04em;
     line-height: 0.95;
+    /* Uzbek and Russian headline words are long: a word that cannot fit is
+       hyphenated — or broken, where the language has no dictionary — rather
+       than pushing the page sideways on a 320px screen. */
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
   .measure { max-width: 64ch; }
   .balance { text-wrap: balance; }
   .pretty { text-wrap: pretty; }
+  /* Chromium's `pretty` only avoids short last lines; on Cyrillic body copy it
+     leaves ragged middles, so those paragraphs are balanced instead. */
+  :lang(ru) .pretty { text-wrap: balance; }
 
   .grid-field {
     background-image:

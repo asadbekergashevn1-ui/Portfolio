@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 type Theme = 'dark' | 'light';
 
-export function ThemeToggle() {
+export function ThemeToggle({ labels }: { labels: { toLight: string; toDark: string; toggleTheme: string } }) {
   const [theme, setTheme] = useState<Theme | null>(null);
 
   useEffect(() => {
@@ -26,8 +26,8 @@ export function ThemeToggle() {
         setTheme(next);
       }}
       className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-[var(--radius-md)] border border-line text-ink-3 transition-colors hover:border-edge hover:text-ink"
-      aria-label={theme ? `Switch to ${next} theme` : 'Toggle theme'}
-      title={theme ? `Switch to ${next} theme` : 'Toggle theme'}
+      aria-label={theme ? (next === 'light' ? labels.toLight : labels.toDark) : labels.toggleTheme}
+      title={theme ? (next === 'light' ? labels.toLight : labels.toDark) : labels.toggleTheme}
     >
       {theme === 'light' ? (
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">

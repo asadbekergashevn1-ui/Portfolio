@@ -1,6 +1,7 @@
 # Asadbek Ergashev — portfolio
 
 Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · the **Signal** design system.
+Trilingual: English, Russian and Uzbek.
 Every page is prerendered to static HTML; the only client JavaScript is the header,
 the project filter, the contact form, the theme toggle, card video playback, the scroll
 reveal and one small motion layer (page transitions and the card spotlight).
@@ -24,6 +25,31 @@ node scripts/verify.mjs http://localhost:3000   # browser checks, see below
 | `/categories/[slug]` | One category |
 | `/about` | Background, principles, toolbox |
 | `/contact` | Validated form that composes an email; direct links |
+
+## Languages
+
+English is served from the bare paths (`/projects`), Russian and Uzbek from a prefix
+(`/ru/projects`, `/uz/projects`). `src/middleware.ts` rewrites the bare paths onto the
+`[locale]` segment and, on a first visit to `/`, redirects once to the language the browser
+asks for (a saved choice in the `NEXT_LOCALE` cookie wins). Every page is prerendered in all
+three languages and links its translations with `hreflang`.
+
+```
+src/i18n/config.ts    the locale list, paths, plural rules
+src/i18n/ui.ts        every interface string, per language
+src/content/i18n/     project, category and profile text: en.json + ru.json + uz.json
+src/content/localize.ts  overlays a translation on the English content
+```
+
+**To change wording**, edit the matching key. Interface text lives in `ui.ts` (TypeScript keeps
+the three dictionaries in step). Project copy lives in `src/content/i18n/<locale>.json`, which
+must keep exactly the shape of `en.json`:
+
+```bash
+node src/content/i18n/check-shape.mjs ru    # same keys, same array lengths, nothing empty
+```
+
+Anything a translation is missing falls back to English, so a gap never breaks a page.
 
 ## Content lives in data, not in pages
 

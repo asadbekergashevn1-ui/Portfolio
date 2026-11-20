@@ -1,17 +1,19 @@
 import type { ProjectStatus } from '@/content/types';
+import type { Locale } from '@/i18n/config';
+import { getDict } from '@/i18n/ui';
 
-const META: Record<ProjectStatus, { label: string; color: string }> = {
-  live: { label: 'In production', color: 'var(--status-live)' },
-  dormant: { label: 'Dormant', color: 'var(--status-dormant)' },
-  mvp: { label: 'MVP', color: 'var(--status-mvp)' },
+const COLOR: Record<ProjectStatus, string> = {
+  live: 'var(--status-live)',
+  dormant: 'var(--status-dormant)',
+  mvp: 'var(--status-mvp)',
 };
 
-export function statusLabel(status: ProjectStatus) {
-  return META[status].label;
+export function statusLabel(locale: Locale, status: ProjectStatus) {
+  return getDict(locale).status[status];
 }
 
-export function StatusDot({ status, withLabel = true }: { status: ProjectStatus; withLabel?: boolean }) {
-  const m = META[status];
+export function StatusDot({ status, locale, withLabel = true }: { status: ProjectStatus; locale: Locale; withLabel?: boolean }) {
+  const m = { color: COLOR[status], label: statusLabel(locale, status) };
   return (
     <span className="label inline-flex items-center gap-2 text-ink-3">
       <span

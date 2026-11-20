@@ -1,0 +1,879 @@
+{
+  "projects": {
+    "xn-crm": {
+      "tagline": "Barcha filiallarni bitta ekrandan boshqaring — kim qancha qarzdorligini bir zumda biling",
+      "role": "Arxitektura, backend va frontend",
+      "client": "Xususiy oʻquv markazi, Termiz",
+      "summary": "Oʻquv markazlari elektron jadvallarga tez sigʻmay qoladi: toʻlovlar undirilmay qoladi, ish haqini hisoblash kunlab choʻziladi, har bir filial esa oʻz hisobini yuritadi. XN CRM oʻquvchilarni qabul qilish, davomat, toʻlovlar, ish haqi va lidlarni bitta tizimga jamlaydi — markaz egasi butun faoliyatni bir joydan boshqaradi.",
+      "problem": "Markaz bir nechta filialga kengaygan edi. Toʻlovlar elektron jadvallarda, davomat qogʻozda yuritilar, oʻqituvchilar ish haqi esa har oy qoʻlda qaytadan hisoblanardi. Kim qancha qarzdorligini bilish uchun yarim kun ketardi, har bir filial esa oʻz hisobini yuritardi.",
+      "approach": "Birorta endpoint yozishdan oldin biznesning oʻzini modellashtirdim: tashkilot, quyi markaz, filial va har bir inson uchun aʼzolik bogʻlanishi. Tenant isolation uch qavat himoyalangan: soʻrovdagi tenantʼni maʼlumotlar bazasiga solishtirib aniqlaydigan guard, har bir queryʼdagi filtr hamda check constraintʼli kompozit foreign keyʼlar — boshqa tenantʼga tegishli yozuvni maʼlumotlar bazasining oʻzi qabul qilmaydi.",
+      "outcome": "Oʻz serverlarida (self-hosted) real ishda: main tarmogʻiga har bir pushʼda avtomatik joylanadi, undan oldin esa CI tekshiruvidan — lint, typecheck, unit va end-to-end testlardan oʻtadi. Zaxira nusxa boʻyicha yozma yoʻriqnoma va har oylik tiklash mashqi bor; deploy skripti avval zaxira nusxa oladi va u muvaffaqiyatsiz boʻlsa, davom etmaydi.",
+      "benefits": [
+        {
+          "title": "Kim qancha qarzdor — bir zumda",
+          "detail": "Qarzdorlar, toʻlov kechiktirishlar va qaytarishlar yarim kunlik jadval titkilash oʻrniga bitta roʻyxatda turadi."
+        },
+        {
+          "title": "Ish haqi — dars jadvalidan",
+          "detail": "Oʻqituvchi ish haqi haqiqatda oʻtilgan darslar asosida hisoblanadi — oy oxiri qaytadan hisob-kitob emas, shunchaki tekshiruvga aylanadi."
+        },
+        {
+          "title": "Auditor ishonadigan hisob",
+          "detail": "Uzilishsiz hisob-faktura raqamlari va append-only audit log: har bir summaning izi bor, hech narsani jimgina oʻzgartirib boʻlmaydi."
+        },
+        {
+          "title": "Tartibsizliksiz oʻsish",
+          "detail": "Yangi filial yoki butun boshli yangi markazni yangi jadvalsiz qoʻshing — har bir inson, toʻlov va ruxsat oʻz tenantʼi doirasida qoladi."
+        },
+        {
+          "title": "Ota-onalar doim xabardor",
+          "detail": "Alohida ilova davomat, uy vazifasi va ballarni koʻrsatadi, xodimlar paneli esa yopiq qoladi."
+        }
+      ],
+      "features": [
+        {
+          "title": "Uzilishsiz hisob-fakturalar",
+          "detail": "Hisob-faktura raqamlari sequenceʼdan emas, qatori bloklanadigan (row-locked) hisoblagichdan olinadi: sequence rollback paytida raqamlarni tashlab ketadi, hisob-faktura raqamlaridagi boʻshliqlar esa audit uchun muammo."
+        },
+        {
+          "title": "Billing tizimi",
+          "detail": "Oylik kurs toʻlovlari har bir markazning oʻz toʻlov kunida hisoblanadi — kechiktirish, qaytarish va qarzdorlar uchun work queue bilan."
+        },
+        {
+          "title": "Kassir smenalari",
+          "detail": "Har bir kassirga bitta ochiq smena — buni ikkinchi brauzer oynasi chetlab oʻta oladigan ilova mantigʻi emas, partial unique index kafolatlaydi."
+        },
+        {
+          "title": "Ish haqi va kadrlar",
+          "detail": "Dars kunlari boʻyicha oʻqituvchi ish haqi, jarimalar, balans tuzatishlari va oyni yopish — lavozim va boʻlimlar bilan."
+        },
+        {
+          "title": "Geolokatsiyali davomat",
+          "detail": "Xodimlar kelib-ketishini joylashuv boʻyicha qayd etadi; kechikish qoidalari va jarimalar ish jadvalidan kelib chiqadi."
+        },
+        {
+          "title": "Oʻquvchilar uchun alohida ilova",
+          "detail": "Oʻquvchilar va ota-onalar oʻz progressive web appʼidan foydalanadi, u faqat tor doiradagi portal APIʼga ulanadi — oʻn bir ekran, xodimlar paneliga esa hech qachon kira olmaydi."
+        },
+        {
+          "title": "Toʻxtab qolmaydigan bildirishnomalar",
+          "detail": "Xabarlar Redis queue orqali qayta urinishlar bilan yetkaziladi, Redis boʻlmasa — jarayon ichida ishlashga oʻtadi. Telegram bir martalik kod bilan ulanadi, webhook maxfiy kalit bilan himoyalangan."
+        },
+        {
+          "title": "Append-only audit log",
+          "detail": "Pulga tegishli har bir oʻzgarishni maʼlumotlar bazasi triggerʼi yozib boradi; bu logʼni ilova tomonidan qayta yozib boʻlmaydi."
+        }
+      ],
+      "metrics": [
+        {
+          "label": "qator kod"
+        },
+        {
+          "label": "maʼlumot modeli"
+        },
+        {
+          "label": "migration",
+          "note": "2026-yil sentabr–noyabr"
+        },
+        {
+          "label": "ruxsat turi"
+        }
+      ],
+      "links": [
+        {
+          "label": "Yopiq repozitoriy",
+          "note": "Manba kodi yopiq; soʻrov boʻyicha namoyish qilib beraman."
+        }
+      ],
+      "stackGroups": [
+        "Backend",
+        "Maʼlumotlar",
+        "Frontend",
+        "Infratuzilma"
+      ],
+      "demoNote": "Haqiqiy ilovadan, oʻylab topilgan demo maʼlumotlar asosida yozib olingan — haqiqiy maktab, oʻquvchi yoki toʻlov yoʻq.",
+      "screenshots": [
+        {
+          "alt": "XN CRM guruhlar roʻyxati: kurs, oʻqituvchi va har bir guruhning toʻlganlik darajasi",
+          "caption": "Har bir guruh: kurs, oʻqituvchi, xona va qanchalik toʻlgani"
+        },
+        {
+          "alt": "XN CRM moliya sahifasi: eng katta qarzlar va oylik tushum",
+          "caption": "Eng katta qarzlar, kassa va oy koʻrsatkichlari — bitta sahifada"
+        },
+        {
+          "alt": "XN CRM haftalik dars jadvali: barcha guruhlar, oʻqituvchilar va xonalar",
+          "caption": "Butun hafta bir qarashda — 24 ta dars, birorta xona ikki marta band qilinmagan"
+        },
+        {
+          "alt": "XN CRM davomat hisoboti: kunlar boʻyicha kelganlar, kechikkanlar va kelmaganlar",
+          "caption": "Kun, guruh va oʻquvchi kesimida davomat"
+        },
+        {
+          "alt": "XN CRM pul oqimi hisoboti: kunlik tushum va joriy qoldiq",
+          "caption": "Pul oqimi — kunma-kun"
+        }
+      ]
+    },
+    "jony-kids-english": {
+      "tagline": "Instagram auditoriyasini sinov darsiga yozilgan mijozlarga aylantiradigan sayt",
+      "role": "Dizayn, ishlab chiqish va texnik yuritish",
+      "client": "Jony Kids English, Termiz",
+      "summary": "Qiziqqan ota-onalar avval Instagramʼda yozar va suhbatlar orasida yoʻqolib qolardi. Bu sayt har bir murojaatni ushlab qoladi, u kelishi bilanoq xodimlarni Telegram orqali xabardor qiladi va har bir lidni toʻlov qiluvchi oʻquvchiga aylanguniga qadar kuzatib boradi.",
+      "problem": "Instagram va Telegramʼdan kelgan mijozlar chat xabarlari sifatida kelib, yoʻqolib ketardi. Kimga qoʻngʻiroq qilingani, kim oʻylab koʻrayotgani va kim xarid qilgani hech qayerda qayd etilmasdi.",
+      "approach": "Qoʻlda yozilgan bitta statik sahifa — frameworkʼsiz, build bosqichisiz — shu sababli auditoriya haqiqatda foydalanadigan oʻrta toifadagi Android telefonlarda tez ochiladi. Har bir lid bir vaqtning oʻzida ikki joyga yoziladi: maʼlumotlar bazasiga va javob beradigan xodimlarga darhol Telegram xabari sifatida. Login ortida esa har bir lidni bosqichma-bosqich olib boradigan kichik CRM bor.",
+      "outcome": "Oʻz domenida ishlamoqda — 72 ta production deploy va bu davom etmoqda. Maktab maʼlumotiga koʻra, sayt hozir yangi oʻquvchilar keladigan eng kuchli manbalardan biri.",
+      "benefits": [
+        {
+          "title": "Birorta murojaat javobsiz qolmaydi",
+          "detail": "Har bir ariza yuborilishi bilanoq maʼlumotlar bazasiga va xodimlar telefoniga tushadi."
+        },
+        {
+          "title": "Har bir lidning keyingi qadami aniq",
+          "detail": "Yangi, qayta qoʻngʻiroq, oʻylab koʻrmoqda, yozildi — jamoa keyin kimga qoʻngʻiroq qilishni doim biladi."
+        },
+        {
+          "title": "Ota-onalar telefonida tez ishlaydi",
+          "detail": "Frameworkʼsiz, qoʻlda yaratilgan — oʻrta toifadagi Android telefonlarda va mobil internetda tez ochiladi."
+        },
+        {
+          "title": "Oson topiladi, oson ulashiladi",
+          "detail": "Tuzilmalangan maʼlumotlar, sitemap va ijtimoiy tarmoqlar uchun chiroyli koʻrinish; domen Google Search Consoleʼda tasdiqlangan."
+        }
+      ],
+      "features": [
+        {
+          "title": "Ikki yoʻlli lid yigʻish",
+          "detail": "Ariza maʼlumotlar bazasiga va uni bir nechta Telegram chatiga tarqatadigan serverless funksiyaga yuboriladi — bir yoʻl ishlamay qolsa ham, lid yoʻqolmaydi."
+        },
+        {
+          "title": "Lidlar pipelineʼi",
+          "detail": "Yangi, qayta qoʻngʻiroq, oʻylab koʻrmoqda, xarid qildi, rad etdi, arxiv — izohlar, qidiruv, filtrlar va CSV eksport bilan."
+        },
+        {
+          "title": "Oʻrnatiladigan admin panel",
+          "detail": "Panel — progressive web app; uning network-first service workerʼi GET boʻlmagan va cross-origin soʻrovlarni ataylab chetlab oʻtadi."
+        },
+        {
+          "title": "Rolga asoslangan kirish",
+          "detail": "Admin tekshiruvi maʼlumotlar bazasi funksiyasi sifatida ishlaydi; admin boʻlmagan foydalanuvchiga boʻsh ekran koʻrsatilmaydi — u tizimdan chiqariladi."
+        },
+        {
+          "title": "Toʻliq SEO",
+          "detail": "Canonical URL, Open Graph va Twitter kartochkalari, taʼlim tashkiloti uchun tuzilmalangan maʼlumotlar, sitemap; admin sahifa esa robotsʼdan yopilgan."
+        },
+        {
+          "title": "Scroll xoreografiyasi",
+          "detail": "GSAP, ScrollTrigger va smooth scroll boʻlimlarning paydo boʻlishini va ota-onalar fikrlari lentasini harakatga keltiradi."
+        }
+      ],
+      "metrics": [
+        {
+          "label": "production deploy"
+        },
+        {
+          "label": "qator, qoʻlda yozilgan"
+        },
+        {
+          "label": "build bosqichi"
+        }
+      ],
+      "links": [
+        {
+          "label": "jonykids.uz"
+        },
+        {
+          "label": "GitHubʼdagi manba kodi"
+        }
+      ],
+      "stackGroups": [
+        "Frontend",
+        "Backend",
+        "Hosting"
+      ],
+      "screenshots": [
+        {
+          "alt": "Jony Kids English tarif rejalari",
+          "caption": "Uchta tarif va ularga qoʻshiladigan bonuslar"
+        },
+        {
+          "alt": "Jony Kids English bepul sinov darsiga yozilish formasi",
+          "caption": "Maʼlumotlar bazasiga yozadigan va xodimlarga Telegramʼda xabar beradigan ariza"
+        },
+        {
+          "alt": "Jony Kids English bosh sahifasi",
+          "caption": "jonykids.uz bosh sahifasi"
+        }
+      ]
+    },
+    "coma": {
+      "tagline": "Har kechki uy vazifasi tekshiruvi — siz uchun, har bir guruh boʻyicha",
+      "role": "Dizayn, ishlab chiqish va texnik yuritish",
+      "client": "Xususiy oʻquv markazi, Termiz",
+      "summary": "Har bir oʻqituvchi uy vazifasi berganiga ishonch hosil qilish uchun har kuni kechqurun oʻnlab guruh chatlarini oʻqib chiqish kerak edi — bunga hech kimning vaqti yoʻq edi. COMA har bir guruhni kuzatadi, uy vazifasi berilgan-berilmaganini va qachon berilganini aniqlaydi hamda egasiga hisobot beradi — oʻqituvchi chatiga hech qachon hech narsa yozmasdan.",
+      "problem": "Bir necha filialli maktab egasi uy vazifasi oʻz vaqtida berilganini tekshirish uchun har kuni kechqurun oʻqituvchilarning oʻnlab guruh chatlarini oʻqib chiqa olmasdi. Bu tekshiruv haqiqiy ish edi, lekin uni hech kim qilmayotgan edi.",
+      "approach": "Userbot guruhlarni faqat oʻqiydi, ularga hech qachon yozmaydi; alohida admin bot esa buyruqlarni shaxsiy chatda qabul qiladi. Har bir guruhning dars jadvali uning Telegramʼdagi nomidan oʻqib olinadi — agent oʻzini oʻzi sozlaydi. Uy vazifasi oynasi dars boshlanishidan tugaganidan bir soat keyingacha ochiq boʻladi va faqat shu oraliqdagi xabarlar koʻrib chiqiladi.",
+      "outcome": "Serverda systemd ostida, avtomatik yangilanish taymeri bilan ishlamoqda. Uning ishlab chiqish jurnali haqiqiy nosozliklar xronikasiga oʻxshaydi — 504 xatosini qaytargan model, 92 soniya davom etgan tasnif, tizimni jim qoldirgan migration — har biri tuzatish va regression test bilan yopilgan.",
+      "benefits": [
+        {
+          "title": "Kechki tekshiruvlarga endi hojat yoʻq",
+          "detail": "Egasi har bir guruhni varaqlab chiqish oʻrniga har bir dars boʻyicha bitta aniq xulosa oladi."
+        },
+        {
+          "title": "Oʻqituvchilarga nisbatan adolatli",
+          "detail": "Erta, oʻz vaqtida, kechikib yoki berilmagan — har bir guruhning oʻz jadvaliga solishtirib aniqlanadi, taxmin bilan emas."
+        },
+        {
+          "title": "Ortiqcha nazoratsiz masʼuliyat",
+          "detail": "Har bir guruh uchun progress dashboardʼi manzarani bir qarashda koʻrsatadi, oʻqituvchilar esa har bir hisobotni yozilishi bilanoq koʻradi."
+        },
+        {
+          "title": "Darsga aralashmaydi",
+          "detail": "Faqat oʻqiydi. Oʻqituvchi guruhiga hech qachon yozmaydi — darslar avvalgidek davom etadi."
+        },
+        {
+          "title": "AI ishlamasa ham ishlayveradi",
+          "detail": "Model ishdan chiqsa, COMA taxmin qilish oʻrniga uni chetlab oʻtadi va keyinroq qayta tekshiradi."
+        }
+      ],
+      "features": [
+        {
+          "title": "Qarorni model qabul qiladi",
+          "detail": "Oynadagi barcha xabarlarni birga tahlil qiladigan bitta soʻrov uy vazifasini tanlaydi yoki u yoʻqligini aytadi. Xabarma-xabar beriladigan ikkinchi fikr hech qachon «yoʻq»ni qayd etilgan vazifaga aylantira olmaydi — aynan shu oʻquvchilar yoʻqlama roʻyxatlarining uy vazifasi deb yozilishiga barham berdi."
+        },
+        {
+          "title": "Oʻz vaqtidalikni baholash",
+          "detail": "Erta, oʻz vaqtida, kechikib yoki berilmagan — guruh nomidan oʻqilgan jadvalga solishtiriladi; ikki soatlik darslar uchun har bir guruhga alohida dars davomiyligi belgilanadi."
+        },
+        {
+          "title": "Modellar holatini kuzatish",
+          "detail": "Ishlamayotgan modellar ikki daqiqadan olti soatgacha eksponensial uzayib boradigan muddatga chetga suriladi va bu diskka saqlanadi — qayta ishga tushganda buzuq model qayta sinalmaydi. Oxirgi ishlagan model birinchi sinaladi."
+        },
+        {
+          "title": "Promptʼga qoʻshiladigan bilimlar",
+          "detail": "Oddiy matnli bilim fayllari klassifikator promptʼiga qoʻshiladi, bot buyrugʻi esa yangi oʻrganilgan qoidani qoʻshib qoʻyadi — agentni deploysiz oʻrgatish mumkin."
+        },
+        {
+          "title": "Idempotent qayta tekshiruv",
+          "detail": "Qayta ishga tushganda yoki tungi uyqudan keyin offline boʻlgan oraliqni qayta koʻrib chiqadi va allaqachon qayd etilganlarini oʻtkazib yuboradi."
+        },
+        {
+          "title": "Ikki tomonlama guruh kartochkalari",
+          "detail": "Egasi jadval yoki oʻqituvchini kartochkaga oddiy oʻzbek tilida javob yozib tuzatadi; javob tahlil qilinadi va qoʻllanadi."
+        }
+      ],
+      "metrics": [
+        {
+          "label": "qator Python kodi"
+        },
+        {
+          "label": "dependency"
+        },
+        {
+          "label": "admin buyrugʻi"
+        },
+        {
+          "label": "oʻqituvchi guruhlariga yozilgan xabar"
+        }
+      ],
+      "links": [
+        {
+          "label": "Yopiq repozitoriy",
+          "note": "Manba kodi yopiq; soʻrov boʻyicha arxitekturani namoyish qilib beraman."
+        }
+      ],
+      "stackGroups": [
+        "Runtime",
+        "AI",
+        "State",
+        "Infratuzilma"
+      ],
+      "screenshots": []
+    },
+    "jony-taxi": {
+      "tagline": "Har bir bola olib ketiladi, har bir ota-ona xabardor, olib ketilmagan har bir holatning sababi aniq",
+      "role": "Arxitektura, maʼlumotlar bazasi va ilova",
+      "client": "Xususiy oʻquv markazi, Termiz",
+      "summary": "Maktab servis transporti biror narsa notoʻgʻri ketmaguncha telefon qoʻngʻiroqlari bilan boshqariladi — keyin esa bola chiqmadimi yoki haydovchi umuman kelmadimi, hech kim bilmaydi. Jony Taxi har bir reysni avtomatik rejalashtiradi, mashina eshik oldiga kelganda ota-onaga xabar beradi va har bir bekatda aynan nima boʻlganini qayd etadi.",
+      "problem": "Maktab oʻquvchilarini filiallarga kun ora jadval asosida servis transportida olib borardi, hammasi esa telefon orqali kelishilardi. Bola olib ketilmay qolsa, u chiqmaganmi yoki haydovchi kelmaganmi — hech kim ayta olmasdi.",
+      "approach": "Kun qoʻlda kiritilmaydi, avtomatik tuziladi: har bir guruh ikkita qatnov hosil qiladi, har bir qatnov haydovchi mashinasining sigʻimiga qarab reyslarga boʻlinadi, har bir reys esa tartiblangan yoʻl qismlaridan iborat. Haydovchi yetib kelganini geofence aniqlaydi va ota-ona telefonida besh daqiqalik teskari sanoq boshlanadi — shundan keyingina bola kelmagan deb belgilanadi. Natijada bola chiqmagan holat haydovchi zonaga umuman yetib bormagan holatdan farqlanadi.",
+      "outcome": "Toʻliq, ishlaydigan ilova; uning haqiqiy ishlab chiqish tarixi jonli maʼlumotlarga qoʻllangan 27 ta raqamlangan migration zanjirida saqlangan. 2026-yil sentabridan beri faol emas.",
+      "benefits": [
+        {
+          "title": "Ota-onalar uchun xotirjam tonglar",
+          "detail": "Mashina kelganda bildirishnoma va besh daqiqalik teskari sanoq — ofisga qoʻngʻiroq qilish shart emas."
+        },
+        {
+          "title": "Nizolarni maʼlumotlar hal qiladi",
+          "detail": "Olib ketilmagan har bir holat bola chiqmagani, haydovchi kechikkani yoki rad etilgani sifatida qayd etiladi — javobgar aniq boʻladi."
+        },
+        {
+          "title": "Oʻzini oʻzi rejalashtiradigan yoʻnalishlar",
+          "detail": "Kunlik qatnovlar har kuni ertalab qoʻlda kiritilmaydi — guruhlar va mashina sigʻimidan avtomatik tuziladi."
+        },
+        {
+          "title": "Bitta ilova — toʻrt xil koʻrinish",
+          "detail": "Haydovchi, ota-ona, filial administratori va egasi har biri faqat oʻziga kerakli maʼlumotni koʻradi, ortigʻini emas."
+        }
+      ],
+      "features": [
+        {
+          "title": "Toʻrt rol — toʻrt panel",
+          "detail": "Haydovchi, ota-ona, filial administratori va super admin — har birining oʻz sahifalari va row-level policyʼlari bor."
+        },
+        {
+          "title": "Masʼuliyat — tizimning oʻzida",
+          "detail": "Bola olib ketilmasa, kim aybdorligi qayd etiladi — bola chiqmagan, haydovchi oʻz vaqtida yetib kelmagan yoki ota-ona rad etgan — shuning uchun hisobotlar ularni alohida koʻrsata oladi."
+        },
+        {
+          "title": "Zaxira variantli marshrutlash",
+          "detail": "Haqiqiy yoʻl marshrutlari uchun OSRM, xotirada cache qilinadi; xizmat sekin ishlasa, ekranni toʻsib qoʻymasdan uzuq-uzuq toʻgʻri chiziqqa oʻtadi."
+        },
+        {
+          "title": "Jonli kuzatuv",
+          "detail": "Haydovchi joylashuvi muntazam yuborib turiladi va real-time kanallar orqali ota-onalar hamda administratorlarga uzatiladi."
+        },
+        {
+          "title": "SMS xarajatisiz avtorizatsiya",
+          "detail": "Telefon raqamlari sunʼiy email manzillarga bogʻlanadi — Supabase Authʼdan SMS provayderga pul toʻlamasdan foydalanish mumkin."
+        },
+        {
+          "title": "Davomat hisobotlari",
+          "detail": "Kechikishlar va davomat ofis uchun Excelʼga eksport qilinadi."
+        }
+      ],
+      "metrics": [
+        {
+          "label": "qator kod"
+        },
+        {
+          "label": "migration"
+        },
+        {
+          "label": "RLS policy"
+        },
+        {
+          "label": "maʼlumotlar bazasi funksiyasi"
+        }
+      ],
+      "links": [
+        {
+          "label": "Ishlab turgan versiya",
+          "note": "Kirish talab qilinadi; soʻrov boʻyicha demo tenant ochib beriladi."
+        }
+      ],
+      "stackGroups": [
+        "Ilova",
+        "Native",
+        "Maʼlumotlar",
+        "Xaritalar"
+      ],
+      "screenshots": []
+    },
+    "ish-ritmi": {
+      "tagline": "Soatma-soat rejalangan kun — va butun hafta saqlanadigan ish ritmi",
+      "role": "Dizayn va ishlab chiqish",
+      "summary": "Koʻp kunlar ish yetishmagani uchun emas, tartib yoʻqligi uchun barbod boʻladi: vazifalar toʻplanib qoladi, muhimlari esdan chiqadi, kun esa nima qilinganini bilmasdan tugaydi. Ish Ritmi kunni sakkizta haqiqiy soatga aniq taqsimlaydi, bajarilgan ishni ball bilan baholaydi va har haftani siz munosib boʻlgan mukofot yoki oʻzingiz belgilagan jarima bilan yakunlaydi.",
+      "problem": "Vazifa ilovalari nima qilmoqchi ekaningizni yozib oladi, lekin uni bajardingizmi-yoʻqmi — bu haqda jim turadi. Yetishmayotgan yarmi — oqibat.",
+      "approach": "Vazifalar qiyinligiga koʻra toʻrt ustunga joylashadi va 10, 25, 50 yoki 100 ball turadi. Sakkiz soatlik rejalashtiruvchi kunni avtomatik taqsimlaydi va hammasi sigʻmasa ogohlantiradi. Davomat kechikib kelish yoki erta ketish uchun ball ayiradi, haftalik oʻrtacha ball esa hafta mukofot bilan yakunlanadimi yoki foydalanuvchining oʻzi belgilagan jarima bilan — shuni hal qiladi.",
+      "outcome": "Ishlamoqda, qurilmalar oʻrtasida sinxronlanadi, ilova sifatida oʻrnatiladi va ishlaydigan offline cacheʼga ega.",
+      "benefits": [
+        {
+          "title": "Har bir soatning oʻz ishi bor",
+          "detail": "Rejalashtiruvchi vazifalarni sakkizta haqiqiy soatga joylaydi va ortiqcha yuklanib qolishingizdan oldin ogohlantiradi — keyin nima qilishni doim bilasiz."
+        },
+        {
+          "title": "Mehnat hisobga olinadi",
+          "detail": "Qiyinroq ish koʻproq ball keltiradi — ball belgilangan katakchalarni emas, haqiqiy oʻsishni aks ettiradi."
+        },
+        {
+          "title": "Masʼuliyat ichiga qurilgan",
+          "detail": "Kechikish ballga tushadi, sust hafta esa siz tanlagan jarimaga."
+        },
+        {
+          "title": "Qayerda ishlasangiz ham",
+          "detail": "Telefon va kompyuter oʻrtasida sinxronlanadi, offline ham ishlaydi."
+        }
+      ],
+      "features": [
+        {
+          "title": "Qiyinlik doskasi",
+          "detail": "Kompyuterda toʻrt ustun orasida drag and drop; telefonda bosib turib koʻchirish."
+        },
+        {
+          "title": "Sakkiz soatlik rejalashtiruvchi",
+          "detail": "Kunni qiyinlikka qarab taqsimlaydi, tushlik tanaffusini hisobga oladi va ortiqcha yuklama haqida ogohlantiradi."
+        },
+        {
+          "title": "Koʻp kunlik maqsadlar",
+          "detail": "Uzoq loyihalarga kunlarda muddat qoʻyiladi va ular qadamma-qadam oldinga siljiydi."
+        },
+        {
+          "title": "Mukofot va jarima",
+          "detail": "Yaxshi hafta belgilangan mukofot keltiradi, yomon hafta belgilangan summaga tushadi. Ikkalasi ham profilda tahrirlanadi."
+        },
+        {
+          "title": "Avvalo offline",
+          "detail": "Internet boʻlmasa lokal cacheʼdan ishlaydi va aloqa tiklanganda sinxronlanadi."
+        }
+      ],
+      "metrics": [
+        {
+          "label": "qator kod"
+        },
+        {
+          "label": "qiyinlik darajasi"
+        },
+        {
+          "label": "deploy manzili",
+          "note": "Vercel va uy serveri"
+        }
+      ],
+      "links": [
+        {
+          "label": "Ilova",
+          "note": "Saqlash uchun kirish talab qilinadi; interfeysni koʻrib chiqish mumkin."
+        },
+        {
+          "label": "GitHubʼdagi manba kodi"
+        }
+      ],
+      "stackGroups": [
+        "Ilova",
+        "Native",
+        "Maʼlumotlar"
+      ],
+      "screenshots": []
+    },
+    "flashy": {
+      "tagline": "Bitta ilovada toʻliq lugʻat kursi — har bir soʻzni tarjima, sinonim va taʼrif orqali oʻrganing, soʻng imtihondan oʻting",
+      "role": "Dizayn va ishlab chiqish",
+      "summary": "Soʻzlar roʻyxatini yodlash faqat tarjimani beradi, xolos — soʻzni ishlata olmaysiz, tushuntira olmaysiz, boshqasi bilan almashtira olmaysiz. FLASHY har bir soʻzni uch tomondan — tarjimasi, sinonimlari va taʼrifi orqali oʻrgatadi, soʻng oʻquvchini imtihon qiladi: soʻz faqat isbotlangandagina oʻrganilgan hisoblanadi.",
+      "problem": "Koʻpchilik lugʻat ilovalari soʻzlar necha marta koʻrilganini oʻlchaydi. Lekin koʻrish — eslab qolish degani emas: eslab qolish — soʻzni biroz qiyinchilik bilan boʻlsa ham esga tushira olish. Oʻquvchi nechta soʻzni koʻrganini emas, qaysi soʻzlar esdan chiqayotganini koʻrishi kerak.",
+      "approach": "Import nusxa olib qoʻyishdan boshlanadi: bir tomonda soʻzlar roʻyxati, ikkinchisida tarjimalar, sinonim va taʼriflar ixtiyoriy; raqamlangan roʻyxatlar raqam boʻyicha moslanadi, shuning uchun bir necha qatorga oʻtib ketgan taʼrif ham joyidan siljimaydi. Soʻng har bir soʻzni uch usulda — taʼrif, tarjima yoki sinonim orqali oʻrganish va toʻrt usulda mashq qilish mumkin: oʻzini baholash bilan flashcardʼlar, test, javobni yozish va zaif soʻzlarni takrorlash.",
+      "outcome": "Ishlamoqda va oʻrnatiladi, akkauntsiz va serversiz: oʻquvchi import qilgan hech narsa uning qurilmasidan chiqmaydi. Manba kodi hali version controlʼga olinmagan — uni tiklash bu loyihadagi navbatdagi vazifa.",
+      "benefits": [
+        {
+          "title": "Faqat tarjimasini emas, soʻzning oʻzini biling",
+          "detail": "Har bir soʻz tarjimasi, sinonimlari va taʼrifi orqali oʻrganiladi — gapda yoki imtihonda aynan kerak boʻladigan tarzda."
+        },
+        {
+          "title": "Taxmin emas, imtihon",
+          "detail": "Test va yozma javobli sinovlar haqiqatda nima esda qolganini tekshiradi — natija his bilan emas, isbot bilan oʻlchanadi."
+        },
+        {
+          "title": "Unutayotganingizni takrorlang",
+          "detail": "Zaif soʻzlar kuzatib boriladi va toʻliq oʻzlashtirilmaguncha oʻzi qaytib keladi."
+        },
+        {
+          "title": "Har qanday roʻyxatdan — kurs",
+          "detail": "Soʻzlar, tarjimalar, sinonim va taʼriflarni hujjatdan qoʻying; qatorlar oʻtib ketgan boʻlsa ham FLASHY ularni toʻgʻri moslaydi."
+        },
+        {
+          "title": "Maxfiylik — sukut boʻyicha",
+          "detail": "Akkaunt ham, server ham yoʻq — hammasi oʻquvchining qurilmasida qoladi."
+        }
+      ],
+      "features": [
+        {
+          "title": "Nusxa-qoʻyish orqali import",
+          "detail": "Ikki roʻyxat yonma-yon — soʻzlar va tarjimalar — ixtiyoriy sinonim va taʼriflar, moslangan juftliklarning jonli koʻrinishi va takrorlarni boshqarish bilan."
+        },
+        {
+          "title": "Raqam boʻyicha moslash",
+          "detail": "Raqamlangan roʻyxatlar raqam boʻyicha moslanadi — bir necha qatorga choʻzilgan yozuvlar ham toʻgʻri juftlanadi."
+        },
+        {
+          "title": "Oʻrganishning uch tomoni",
+          "detail": "Esga tushiriladigan tomonni tanlang: taʼriflar, tarjimalar yoki sinonimlar."
+        },
+        {
+          "title": "Mashqning toʻrt usuli",
+          "detail": "«Bildim / mashq kerak» baholi flashcardʼlar, test, javobni yozish va faqat zaif soʻzlarni takrorlash."
+        },
+        {
+          "title": "Haqiqiy faoliyatga asoslangan natijalar",
+          "detail": "Aniqlik, topshirilgan testlar, takrorlashlar va soʻz holatlari — yangi, oʻrganilmoqda, takrorlash, oʻzlashtirilgan — hammasi oʻquvchi haqiqatda nima qilganidan hisoblanadi."
+        },
+        {
+          "title": "Tuzilishidanoq maxfiy",
+          "detail": "Hammasi brauzerda qoladi. Bu sayt uchun yozib olinayotganda sahifadan birorta ham soʻrov chiqmadi."
+        }
+      ],
+      "metrics": [
+        {
+          "label": "soʻzning tomoni"
+        },
+        {
+          "label": "mashq va imtihon rejimi"
+        },
+        {
+          "label": "serverga soʻrov"
+        }
+      ],
+      "links": [
+        {
+          "label": "Ilova"
+        }
+      ],
+      "stackGroups": [
+        "Ilova",
+        "Saqlash"
+      ],
+      "screenshots": [
+        {
+          "alt": "Haqiqiy mashgʻulotlardan keyingi FLASHY dashboardʼi",
+          "caption": "Bitta flashcard mashqi va bitta testdan keyingi dashboard"
+        },
+        {
+          "alt": "FLASHY flashcardʼi",
+          "caption": "Avval eslang, soʻng javobni oching va oʻzingizni baholang"
+        },
+        {
+          "alt": "FLASHY natijalari va statistikasi",
+          "caption": "Haqiqiy faoliyatdan hisoblangan aniqlik va soʻz holatlari"
+        }
+      ]
+    },
+    "level-up": {
+      "tagline": "Maktab natijalari — ota-onalar his qiladigan hikoya",
+      "role": "Dizayn va ishlab chiqish",
+      "summary": "Koʻpchilik maktab saytlarida band ballari va sertifikatlar — shunchaki raqamlar devori. LEVEL UP ularni scroll bilan harakatlanadigan hikoyaga aylantiradi — choʻqqiga xarsang toshni itarayotgan oʻquvchi, ekranga chiqishi bilan sanab boriladigan natijalar — shunda erishilgan yutuqlar shunchaki sanab oʻtilmaydi, his qilinadi.",
+      "problem": "Til markazining natijalari — band ballari, sertifikatlar, filiallar — boshqa hamma joyda sahifadagi raqamlar, xolos. Ular jadval emas, hikoya boʻlib yetib borishi kerak edi.",
+      "approach": "Boʻlimlar ekranda qotib turadi, ichidagi kontent esa harakatlanadi; sarlavhalar harfma-harf va soʻzma-soʻz yigʻiladi, radar diagramma esa oʻquvchining qabuldan natijagacha boʻlgan yoʻlini chizib beradi. Screen readerʼlar uchun animatsiyaning tavsifi ham berilgan.",
+      "outcome": "Ishlamoqda — bu portfoliodagi vizual jihatdan eng dadil sayt. Maktab maʼlumotiga koʻra, uning saytlari yangi oʻquvchilarning barqaror oqimini olib kelmoqda.",
+      "benefits": [
+        {
+          "title": "Bir koʻrishda esda qoladi",
+          "detail": "Scroll bilan harakatlanadigan 3D bosh ekran maktabga oʻziga xos qiyofa beradi."
+        },
+        {
+          "title": "Natijalar — markazda",
+          "detail": "Oʻquvchilar natijalari sahifaning izohi emas, asosiy qismi."
+        },
+        {
+          "title": "Hamma uchun animatsiya",
+          "detail": "Har bir animatsiya screen readerʼlar uchun ham tavsiflangan."
+        }
+      ],
+      "features": [
+        {
+          "title": "Qotib turadigan scroll boblari",
+          "detail": "Bosh ekran, estafeta va oʻsish boʻlimlari kontent oʻtib boʻlguncha joyida turadi."
+        },
+        {
+          "title": "Harfma-harf paydo boʻlish",
+          "detail": "Sarlavhalar har bir belgi, matn esa har bir soʻz boʻyicha jonlanadi."
+        },
+        {
+          "title": "Sanab boriladigan natijalar",
+          "detail": "Oʻquvchilar va sertifikatlar soni ekranga chiqqanda sanab ortadi."
+        },
+        {
+          "title": "Screen readerʼlar uchun tavsif",
+          "detail": "Koʻzga koʻrinmaydigan paragraf koʻra oladigan foydalanuvchilar kuzatayotgan animatsiyani soʻzlab beradi."
+        }
+      ],
+      "metrics": [
+        {
+          "label": "qotib turadigan boʻlim"
+        },
+        {
+          "label": "oʻz serveridagi shrift fayli"
+        }
+      ],
+      "links": [
+        {
+          "label": "Sayt"
+        }
+      ],
+      "stackGroups": [
+        "Framework",
+        "Stillar"
+      ],
+      "screenshots": [
+        {
+          "alt": "LEVEL UP natijalar boʻlimi: hisoblagichlar va radar",
+          "caption": "Natijalar ekranga chiqishi bilan sanab boriladi"
+        },
+        {
+          "alt": "LEVEL UP oʻquvchilar natijalari kartochkalari",
+          "caption": "Aylanuvchi kartochkalar toʻplamidagi oʻquvchilar natijalari"
+        }
+      ]
+    },
+    "brain-train": {
+      "tagline": "Bolalar ingliz tilida oʻqishni bilmasdan turib ham tushunadigan taʼlim ilovasi",
+      "role": "Dizayn va ishlab chiqish",
+      "client": "Jony Kids English, Termiz",
+      "summary": "Bizda bolalar uchun taʼlim ilovalari ingliz yoki rus tilida boʻladi, besh yoshli bola esa birinchi darsga yetmay qiziqishini yoʻqotadi. Brain Train ularni oʻzbek tilida, samimiy robot bilan kutib oladi, ilovani oʻzi yoqtirgan rangga boʻyash imkonini beradi va bir necha bosishda birinchi bosqichga olib boradi.",
+      "problem": "Bu bozordagi bolalar taʼlim ilovalari ingliz yoki rus tilida. Uchinchi tildagi ilovaga duch kelgan besh yoshli bola birinchi darsga yetmay voz kechadi.",
+      "approach": "Hammasi oʻzbek tilida va deyarli hech narsa oʻqishni talab qilmaydi. Bola tanlagan rang butun ilovaning mavzusini oʻzgartiradi — natija chindan ham uniki boʻlib tuyuladi. Bitta xeshlangan qurilma identifikatori akkauntlarsiz va aloqa raqamidan boshqa shaxsiy maʼlumotlarsiz har bir qurilmaga bitta oʻtishni taʼminlaydi.",
+      "outcome": "Toʻliq, puxta ishlangan onboarding qismi — toʻqqiz ekran, toʻliq animatsiyalangan — oʻyinlar hali yaratilmagani uchun halollik bilan MVP sifatida taqdim etilgan.",
+      "benefits": [
+        {
+          "title": "Bola tilida gapiradi",
+          "detail": "Har bir ekran oʻzbek tilida va hali oʻqishni bilmaydigan bolalar uchun moʻljallangan."
+        },
+        {
+          "title": "Birinchi bosishdanoq uniki",
+          "detail": "Bola tanlagan rang butun ilovani qayta bezaydi."
+        },
+        {
+          "title": "Maktab uchun iliq lid",
+          "detail": "Onboarding ota-onaning markaz uchun aloqa raqami bilan yakunlanadi — har bir qurilmadan bitta, akkauntlarsiz."
+        }
+      ],
+      "features": [
+        {
+          "title": "Animatsiyali SVG maskot",
+          "detail": "Toʻrt xil kayfiyat va bola tanlagan asosiy rangga moslashadigan kiyim."
+        },
+        {
+          "title": "Jonli rang almashtirish",
+          "detail": "Rang tanlash keyingi barcha ekranlarni qayta bezaydi: tugmalar, progress, fon va maskot."
+        },
+        {
+          "title": "Claymorphism tizimi",
+          "detail": "Noldan yaratilgan yumshoq soyali komponentlar toʻplami — tugmalar, kartochkalar, kiritish maydonlari, nuqtalar, progress."
+        },
+        {
+          "title": "Qurilmaga bogʻlangan identifikatsiya",
+          "detail": "Xeshlangan qurilma tokeni loginsiz har bir qurilmada bir martalik oʻyinni taʼminlaydi."
+        },
+        {
+          "title": "Backendsiz ham ishlaydi",
+          "detail": "Hech qanday kalit sozlanmagan boʻlsa ham butun jarayon oxirigacha ishlaydi; hech narsa saqlanmaydi va hech qanday xato chiqmaydi."
+        }
+      ],
+      "metrics": [
+        {
+          "label": "ekran"
+        },
+        {
+          "label": "komponent"
+        },
+        {
+          "label": "qator kod"
+        }
+      ],
+      "links": [
+        {
+          "label": "Veb-versiya",
+          "note": "Mobil ilovaning Expo web buildʼi."
+        }
+      ],
+      "stackGroups": [
+        "Ilova",
+        "Animatsiya",
+        "Maʼlumotlar"
+      ],
+      "screenshots": [
+        {
+          "alt": "Brain Train rang tanlash ekrani ilovani qayta bezamoqda",
+          "caption": "Tanlangan rang keyingi barcha ekranlarni qayta bezaydi"
+        },
+        {
+          "alt": "Brain Train fan tanlash ekrani",
+          "caption": "Fanlar, bir nechtasini tanlash mumkin — bola tanlagan rangda"
+        }
+      ]
+    },
+    "link-board": {
+      "tagline": "Kerakli har bir havola — bir bosishda, hatto offline ham",
+      "role": "Dizayn va ishlab chiqish",
+      "summary": "Xatchoʻplar telefon va noutbuk orasida yoʻqolib ketadi, kuniga yigirma marta ochiladigan narsa uchun esa parol — ortiqcha ovoragarchilik. Link Board barcha havolalarni toʻrt xonali PIN-kod ortidagi, qidiruvli bitta doskada saqlaydi.",
+      "problem": "Brauzer xatchoʻplari telefondan kompyuterga oʻtganda saqlanib qolmaydi, kuniga yigirma marta ochiladigan narsa uchun esa parol — ortiqcha toʻsiq.",
+      "approach": "Email va parol oʻrniga telefon raqami va toʻrt xonali PIN-kod. Aloqa uzilsa, oxirgi saqlangan nusxa ochiladi va tahrirlash uchun internet kerakligini ochiq aytadigan banner chiqadi.",
+      "outcome": "Ishlamoqda va oʻrnatiladi; bu portfoliodagi eng puxta sozlangan deploy — qatʼiy security headerʼlar va versiyasi qotirilgan, integrity tekshiriladigan dependency.",
+      "benefits": [
+        {
+          "title": "Xatchoʻplardan tezroq",
+          "detail": "Qidiruv, sevimlilar va toifalar istalgan havolani bitta tugma bosishda topadi."
+        },
+        {
+          "title": "Raqam bilan kirish",
+          "detail": "Email va parol oʻrniga telefon raqami va PIN-kod."
+        },
+        {
+          "title": "Yoʻlda ham ishlaydi",
+          "detail": "Oxirgi saqlangan doska internetsiz ham ochiladi."
+        },
+        {
+          "title": "Ilova kabi oʻrnatiladi",
+          "detail": "Android yoki iOSʼda bosh ekranga qoʻshing."
+        }
+      ],
+      "features": [
+        {
+          "title": "Telefon va PIN",
+          "detail": "Parol oʻrniga toʻrt raqam; mamlakat kodini foydalanuvchi oʻrniga tizim qoʻyadi."
+        },
+        {
+          "title": "Offline rejim",
+          "detail": "Cacheʼdagi nusxani koʻrsatadi va qoʻshish hamda tahrirlash uchun internet kerakligini ochiq aytadi."
+        },
+        {
+          "title": "Qidiruv va saralash",
+          "detail": "Qidiruv uchun klaviatura yorligʻi; oxirgilari, alifbo boʻyicha yoki avval sevimlilar tartibida saralash; maʼlumotlardan avtomatik tuziladigan toifa tugmalari."
+        },
+        {
+          "title": "Oʻrnatish boʻyicha yoʻriqnoma",
+          "detail": "Androidʼda tizimning oʻz oʻrnatish oynasi, bunday oyna boʻlmagan iOS uchun esa bosqichma-bosqich koʻrsatma."
+        },
+        {
+          "title": "Mavzu miltillamaydi",
+          "detail": "Saqlangan mavzu sahifa birinchi chizilishidan oldin qoʻllanadi."
+        }
+      ],
+      "metrics": [
+        {
+          "label": "xonali PIN"
+        },
+        {
+          "label": "security header"
+        }
+      ],
+      "links": [
+        {
+          "label": "Ilova",
+          "note": "Saqlangan havolalarni koʻrish uchun kirish talab qilinadi."
+        }
+      ],
+      "stackGroups": [
+        "Frontend",
+        "Backend"
+      ],
+      "screenshots": []
+    },
+    "jony-math": {
+      "tagline": "Telefon raqamini soʻrashdan oldin ota-ona ishonchini qozonadigan bepul kurs sahifasi",
+      "role": "Dizayn va ishlab chiqish",
+      "client": "Jony Kids, Termiz",
+      "summary": "Bepul takliflar ota-onalarda shubha uygʻotadi. Bu sahifa ularning shubhalariga paydo boʻlish tartibida javob beradi — va hech narsa soʻramasdan oldin ishlaydigan karra jadvalini shu yerning oʻzida sinab koʻrish imkonini beradi.",
+      "problem": "Bepul kurs shubha uygʻotadi. Sahifa telefon raqamini soʻrashdan oldin ishonch qozonishi kerak.",
+      "approach": "Sahifa suhbat kabi tuzilgan: ota-ona allaqachon sezib turgan qiyinchilikni nomlaydi, bola qila oladigan oʻnta narsani koʻrsatadi, oʻn ikki darsning barchasini ochib beradi, soʻng eʼtirozlarga javob beradi — va faqat shundan keyin soʻraydi.",
+      "outcome": "Ishlamoqda — va maktab maʼlumotiga koʻra, kursga haqiqiy arizalar olib kelmoqda.",
+      "benefits": [
+        {
+          "title": "Ishonishdan oldin sinab koʻring",
+          "detail": "Bosh ekrandagi jonli karra jadvali ota-onalar va bolalarga usulni darhol sinab koʻrish imkonini beradi."
+        },
+        {
+          "title": "Shubhalarga oldindan javob",
+          "detail": "Har bir boʻlim ota-ona beradigan navbatdagi savolga javob beradi."
+        },
+        {
+          "title": "Kutilmagan holatlar yoʻq",
+          "detail": "Oʻn ikki darsning barchasi roʻyxatdan oʻtishdan oldin ochib berilgan."
+        }
+      ],
+      "features": [
+        {
+          "title": "Eʼtirozlar tartibidagi boʻlimlar",
+          "detail": "Har bir blok ota-ona aynan shu nuqtada beradigan savolga javob beradi."
+        },
+        {
+          "title": "Aniq natijalar",
+          "detail": "Oʻquv dasturining umumiy bayoni oʻrniga bola qila oladigan oʻnta aniq narsa."
+        },
+        {
+          "title": "Toʻliq dars rejasi",
+          "detail": "Toʻrt haftaga moʻljallangan oʻn ikki darsning barchasi roʻyxatdan oʻtishdan oldin koʻrsatiladi."
+        }
+      ],
+      "metrics": [
+        {
+          "label": "dars"
+        },
+        {
+          "label": "hafta"
+        }
+      ],
+      "links": [
+        {
+          "label": "Sahifa"
+        }
+      ],
+      "stackGroups": [
+        "Build"
+      ],
+      "screenshots": [
+        {
+          "alt": "Jony Math bosh ekrani va interaktiv karra jadvali",
+          "caption": "Bosh ekranning oʻzi — ishlaydigan karra jadvali"
+        },
+        {
+          "alt": "Bola qila oladigan oʻnta narsa",
+          "caption": "Oʻquv dasturi emas — oʻnta aniq natija"
+        }
+      ]
+    }
+  },
+  "categories": {
+    "crm": {
+      "name": "CRM va ERP",
+      "blurb": "Biznesning puli, xodimlari va hisobini yurituvchi tizimlar — bu uchalasida ham xatoga oʻrin yoʻq."
+    },
+    "automation": {
+      "name": "Avtomatlashtirish va AI",
+      "blurb": "Hech kim qilmayotgan muntazam ishni bajaradigan agentlar — model ishdan chiqsa, toʻxtab qolmaydi, cheklangan rejimda ishlashda davom etadi."
+    },
+    "mobile": {
+      "name": "Mobil ilovalar",
+      "blurb": "Odamlar haqiqatda olib yuradigan telefonlar uchun kross-platforma ilovalar — servis transportini boshqarishdan tortib bolalar uchun onboardingʼgacha."
+    },
+    "education": {
+      "name": "Taʼlim",
+      "blurb": "Oʻrgatadigan va baholaydigan vositalar — bilim odatda qanday oʻlchanishiga emas, oʻrganish qanday kechishiga asoslangan."
+    },
+    "websites": {
+      "name": "Veb-saytlar",
+      "blurb": "Eʼtiborni arizaga aylantiradigan, oʻrta toifadagi Android telefonlarda tez ochiladigan saytlar."
+    },
+    "web-apps": {
+      "name": "Veb-ilovalar",
+      "blurb": "Oʻrnatiladigan va offline ishlaydigan, aniq maqsadli shaxsiy vositalar."
+    }
+  },
+  "profile": {
+    "role": "Dasturiy taʼminot muhandisi",
+    "location": "Termiz, Oʻzbekiston",
+    "headline": "Mijoz olib keladigan va biznesda tartib saqlaydigan dasturlar yarataman.",
+    "intro": [
+      "Tashrif buyuruvchilarni mijozga aylantiradigan saytlar. Pul, ish haqi, davomat va uy vazifasini hech kim ortidan quvmasa ham nazoratda ushlab turadigan tizimlar. Ish kuni yoki lugʻat kursini aniq tartibga soladigan ilovalar.",
+      "Oʻnta mahsulot — barchasi ishga tushirilgan va haqiqiy maʼlumotlar bilan ishlatilmoqda. Ular biznes ular haqida bosh qotirmasligi uchun yaratilgan."
+    ],
+    "about": [
+      "Oʻzbekiston janubidagi Termiz shahridan ishlayman, asosan dasturi xato qilishiga yoʻl qoʻyib boʻlmaydigan kichik bizneslar uchun. Masalan, bir maktabning toʻlovlari, ish haqi va davomati men yaratgan bitta tizimda yuritiladi, egasi esa birorta chatni ochmasdan har bir dars boʻyicha uy vazifasi haqida xulosa oladi.",
+      "Bu mening ish uslubimni belgilaydi. Endpoint yozishdan oldin biznesni modellashtiraman. Muhim qoidalarni maʼlumotlar bazasiga joylayman — u yerda ularni ikkinchi brauzer oynasi ham, eʼtiborsiz yozilgan skript ham chetlab oʻta olmaydi. Avval nosozlikni loyihalayman — 504 qaytaradigan model, jonli maʼlumotlarda ishlaydigan migration, geofenceʼga hech qachon yetib bormaydigan servis mashinasi — va shunday holat yuz berganda nima boʻlganini yozib qoʻyaman.",
+      "Butun stack boʻyicha ishlayman, chunki bu mijozlarga hammasini tushunadigan bitta mutaxassis kerak: Postgres va row-level security, NestJS va Prisma, Vue va React, telefonda Ionic va Expo, serverda systemd ostidagi Python agentlar."
+    ],
+    "principles": [
+      {
+        "title": "Avval biznesni modellashtirish",
+        "detail": "Maʼlumotlar modeli — bu mahsulotning oʻzi. Endpointʼlar, ekranlar va hisobotlar undan kelib chiqadi, aksincha emas."
+      },
+      {
+        "title": "Qoidalarni chetlab oʻtib boʻlmaydigan joyga qoʻyish",
+        "detail": "Constraintʼlar, policyʼlar va unique indexʼlar maʼlumotlar bazasida — race condition chetlab oʻta oladigan ilova kodida emas."
+      },
+      {
+        "title": "Nosozlikni oldindan loyihalash",
+        "detail": "Har bir tashqi dependencyʼning zaxira varianti va koʻrinadigan holati bor. Hech narsa jimgina ishdan chiqmaydi."
+      },
+      {
+        "title": "Avval oʻlchash, keyin daʼvo qilish",
+        "detail": "Bu saytda biror raqam boʻlsa, u repozitoriydan sanab olingan."
+      }
+    ],
+    "toolboxGroups": [
+      "Dasturlash tillari",
+      "Backend",
+      "Frontend",
+      "Mobil",
+      "AI va avtomatlashtirish",
+      "Infratuzilma"
+    ]
+  }
+}

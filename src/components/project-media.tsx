@@ -3,10 +3,13 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useShown } from './reveal';
+import type { Locale } from '@/i18n/config';
+import { getDict } from '@/i18n/ui';
 import type { Project } from '@/content/types';
 
 type Props = {
   project: Project;
+  locale: Locale;
   /** Above the fold: load the poster eagerly. */
   priority?: boolean;
   sizes?: string;
@@ -24,7 +27,7 @@ type Props = {
  * - No clip yet: a typographic panel, which the design system treats as a
  *   first-class state rather than a missing image.
  */
-export function ProjectMedia({ project, priority = false, sizes = '(min-width: 1024px) 33vw, 100vw', className = '' }: Props) {
+export function ProjectMedia({ project, locale, priority = false, sizes = '(min-width: 1024px) 33vw, 100vw', className = '' }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [near, setNear] = useState(false);
@@ -118,7 +121,7 @@ export function ProjectMedia({ project, priority = false, sizes = '(min-width: 1
       {still ? (
         <Image
           src={still}
-          alt={screenshots[0]?.alt ?? `${project.name} interface`}
+          alt={screenshots[0]?.alt ?? `${project.name} ${getDict(locale).common.interface}`}
           fill
           sizes={sizes}
           priority={priority}
